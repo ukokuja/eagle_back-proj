@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap"
+    rel="stylesheet">
+    <link rel="stylesheet" href="lib/bootstrap-timepicker.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+    <title>Eagle Eye</title>
+  </head>
+  
+<body id="mainArticleLayout">
+  <header class="article">
+    <nav class="navbar navbar-dark container-md">
+      <a class="navbar-brand" href="article.html">
+        <svg class="bi bi-arrow-left" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd"
+            d="M5.854 4.646a.5.5 0 010 .708L3.207 8l2.647 2.646a.5.5 0 01-.708.708l-3-3a.5.5 0 010-.708l3-3a.5.5 0 01.708 0z"
+            clip-rule="evenodd" />
+          <path fill-rule="evenodd" d="M2.5 8a.5.5 0 01.5-.5h10.5a.5.5 0 010 1H3a.5.5 0 01-.5-.5z"
+            clip-rule="evenodd" />
+        </svg>
+      </a>
+      <section class="my-2 my-lg-0 user-image">
+        <img src="images/user.png" alt="user-image">
+      </section>
+    </nav>
+
+    <section class="breadcrumbs container-md">
+      <h2>Sde Boker</h2>
+      <h1>Edit Trip</h1>
+    </section>
+
+    <button type="button" class="btn btn-secondary btn-lg" data-toggle="modal" data-target="#imagesModal">Change
+      picture</button>
+  </header>
+
+  <main class="article">
+
+    <form id="editForm" method="GET" class="needs-validation" novalidate action="http://html5-book.co.il/teach/forms/get_form2.php">
+      <section class="container-md" id="wrapper">
+          <section id="articleData">
+            <a href="#" class="btn btn-link btn-sm" data-toggle="modal" data-target="#imagesModal">Change
+              picture
+            </a>
+            <input type="hidden" value="images/sdeBoker.jpg" name="image">
+            <section id="description">
+              <h3>Title</h3>
+              <div class="form-group">
+                <input type="text" class="form-control" name="title" id="title" placeholder="Ein Gedi" value="Sde Boker" required>
+                <div class="invalid-feedback">
+                  Please indicate trip title
+                </div>
+              </div>
+
+              <h3>Description</h3>
+              <div class="form-group">
+                <textarea class="form-control no-validate" name="description"
+                  rows="3">Ein Gedi, just aside the Dead Sea in the Judean Desert, not too far from Jerusalem, is one of Israel's premier hiking spots, featuring spectacular beauty, varied landscapes, and botanical gardens. There's no doubt that Ein Gedi Nature Reserve is one of the most beautiful places in Israel. While it is located close to Jerusalem, it feels worlds away, Ein Gedi is, of course one of the most popular escape spots for locals and tourists who take advantage of the reserve, botanical gardens, and the Dead Sea.</textarea>
+              </div>
+            </section>
+
+            <section id="details">
+              <h3>Details</h3>
+
+              <section class="row">
+
+                <section class="col-md-6">
+                  <h5>School</h5>
+                  <div class="form-group">
+                    <input type="text" name="schoolName" class="form-control" placeholder="School Name" value="Eagle High School"
+                      pattern="((\s+)?\w+\s+\w+\s?)+" required>
+                      <div class="invalid-feedback">
+                        Please indicate school name
+                      </div>
+                  </div>
+                </section>
+
+                <section class="col-md-6">
+                  <h5>Kids</h5>
+                  <div class="input-group">
+                    <input type="number" class="form-control" name="kidsAmount" placeholder="10" value="49" min="1" required>
+                    <div class="input-group-append">
+                      <span class="input-group-text">Kids</span>
+                    </div>
+                    <div class="invalid-feedback">
+                      Can not indicate less than 1 kid.
+                    </div>
+                  </div>
+                </section>
+
+                <section class="col-md-6">
+                  <h5>Guides</h5>
+                  <div class="input-group">
+                    <input type="number" name="guidesAmount" class="form-control" placeholder="2" value="3" min="1" required>
+                    <div class="input-group-append">
+                      <span class="input-group-text">Guides</span>
+                    </div>
+                    <div class="invalid-feedback">
+                      Can not indicate less than 1 guide.
+                    </div>
+                  </div>
+                </section>
+
+                <section class="col-md-6">
+                  <h5>Accessability</h5>
+                  <section>
+                    <input type="radio" name="accessability" value="very" checked> <span>High accessability</span><br>
+                    <input type="radio" name="accessability" value="medium"> <span>Medium accessability</span><br>
+                    <input type="radio" name="accessability" value="low"> <span>Low accessability</span>
+                  </section>
+                </section>
+
+                <section class="col-md-6">
+                  <h5>Route Includes:</h5>
+                  <section class="includes">
+                    <div class="form-group">
+                      <select multiple class="form-control" name="includes[]">
+                        <option value="animal">Animal zone</option>
+                        <option value="water">Water experience</option>
+                        <option value="panoramic">Panoramic views</option>
+                        <option value="snow">Snow slides</option>
+                        <option value="picnic">Picnic area</option>
+                      </select>
+                    </div>
+
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="animalIncludes" name="includes[]"
+                        value="animal">
+                      <label class="custom-control-label" for="animalIncludes">Animal zone</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="climbingIncludes" name="includes[]"
+                        value="water">
+                      <label class="custom-control-label" for="climbingIncludes">Water experience</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="panoramicIncludes" name="includes[]"
+                        value="panoramic">
+                      <label class="custom-control-label" for="panoramicIncludes">Panoramic views</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="snowIncludes" name="includes[]"
+                        value="snow">
+                      <label class="custom-control-label" for="snowIncludes">Snow slides</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="picnicIncludes" name="includes[]"
+                        value="picnic">
+                      <label class="custom-control-label" for="picnicIncludes">Picnic area</label>
+                    </div>
+
+                  </section>
+                </section>
+
+                <section class="col-md-6">
+                  <h5>Route doesn't Include:</h5>
+                  <section class="not-includes">
+                    <select multiple class="form-control" name="notIncludes[]">
+                      <option value="internet">Internet everywhere</option>
+                      <option value="climbing">Climbing areas</option>
+                      <option value="panoramic">Panoramic views</option>
+                      <option value="snow">Snow slides</option>
+                      <option value="picnic">Picnic area</option>
+                    </select>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="internet" name="notIncludes[]"
+                        value="internet">
+                      <label class="custom-control-label" for="internet">Internet everywhere</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="climbing" name="notIncludes[]"
+                        value="climbing">
+                      <label class="custom-control-label" for="climbing">Climbing areas</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="panoramic" name="notIncludes[]"
+                        value="panoramic">
+                      <label class="custom-control-label" for="panoramic">Panoramic views</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="snow" name="notIncludes[]" value="snow">
+                      <label class="custom-control-label" for="snow">Snow slides</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="picnic" name="notIncludes[]"
+                        value="picnic">
+                      <label class="custom-control-label" for="picnic">Picnic area</label>
+                    </div>
+                  </section>
+                </section>
+              </section>
+            </section>
+            <section id="itinerary">
+              <h3>Itinerary</h3>
+              <section>
+                <div class="accordion" id="accordionExample">
+                  <div class="card border-light mb-3">
+                    <div class="card-header" id="headingOne">
+                      <h2 class="mb-0">
+                        <input type="hidden" value="0800" name="itinerary[0][start]">
+                        <input type="hidden" value="1000" name="itinerary[0][end]">
+                        <input type="hidden" value="Masada" name="itinerary[0][place]">
+                        <button class="btn btn-link text-left" type="button" data-toggle="collapse"
+                          data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          08:00 - 10:00 - Masada
+                        </button>
+                        <button class="btn btn-link" type="button" data-target="#editModal" data-time-from="08:00"
+                          data-time-to="10:00" data-place="Masada" aria-expanded="true" aria-controls="collapseOne"
+                          data-toggle="modal">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-link" type="button" data-target="#collapseOne" aria-expanded="true"
+                          aria-controls="collapseOne">
+                          <i class="far fa-trash-alt"></i>
+                        </button>
+                      </h2>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                      data-parent="#accordionExample">
+                      <div class="card-body">
+                        Masada is extremely high, and can be ascended on foot by the winding "snake path" or by a cable
+                        car
+                        that runs from the tourist center at the foot of the mountain to the top. The tourist center
+                        also
+                        features a movie about the story of Masada, a model of the site, and an exhibit of the
+                        archeological
+                        findings.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card border-light mb-3">
+                    <div class="card-header" id="headingTwo">
+                      <h2 class="mb-0">
+                        <input type="hidden" value="1100" name="itinerary[1][start]">
+                        <input type="hidden" value="1400" name="itinerary[1][end]">
+                        <input type="hidden" value="Ein Gedi" name="itinerary[1][place]">
+                        <button class="btn btn-link text-left collapsed" type="button" data-toggle="collapse"
+                          data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          11:00 - 14:00 - Ein Gedi
+                        </button>
+                        <button class="btn btn-link" type="button" data-toggle="modal" data-target="#editModal"
+                          data-time-from="11:00" data-time-to="14:00" data-place="Ein gedi" aria-expanded="true"
+                          aria-controls="collapseTwo">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-link" type="button" data-target="#collapseTwo" aria-expanded="true"
+                          aria-controls="collapseTwo">
+                          <i class="far fa-trash-alt"></i>
+                        </button>
+                      </h2>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                      <div class="card-body">
+                        Ein Gedi, just aside the Dead Sea in the Judean Desert, not too far from Jerusalem, is one of
+                        Israel's premier hiking spots, featuring spectacular beauty, varied landscapes, and botanical
+                        gardens. There's no doubt that Ein Gedi Nature Reserve is one of the most beautiful places in
+                        Israel. While it is located close to Jerusalem, it feels worlds away, Ein Gedi is, of course,
+                        one of the most popular escape spots for locals and tourists who take advantage of the reserve,
+                        botanical gardens, and the Dead Sea.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card border-light mb-3">
+                    <div class="card-header" id="headingThree">
+                      <h2 class="mb-0">
+                        <input type="hidden" value="1600" name="itinerary[2][start]">
+                        <input type="hidden" value="1900" name="itinerary[2][end]">
+                        <input type="hidden" value="Dead Sea" name="itinerary[2][place]">
+                        <button class="btn btn-link text-left collapsed" type="button" data-toggle="collapse"
+                          data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          16:00 - 19:00 Dead Sea
+                        </button>
+                        <button class="btn btn-link" type="button" data-toggle="modal" data-target="#editModal"
+                          data-time-from="16:00" data-time-to="19:00" data-place="Dead sea" aria-expanded="true"
+                          aria-controls="collapseThree">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-link" type="button" data-target="#collapseThree" aria-expanded="true"
+                          aria-controls="collapseThree">
+                          <i class="far fa-trash-alt"></i>
+                        </button>
+                      </h2>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                      data-parent="#accordionExample">
+                      <div class="card-body">
+                        The Dead Sea, known in Hebrew as Yam Ha-Melakh (the Sea of Salt) is the lowest point on earth,
+                        surrounded by the stunning landscape of the Negev Desert. The shores of the Dead Sea are the
+                        lowest point on the surface of the earth, and the saline water of the lake give lead to the
+                        name because no fish can survive in the salty waters. The other result of the salty water is
+                        their renowned health and healing properties and the unique feature that one can
+                        float naturally in them.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card border-light mb-3">
+                    <div class="card-header" id="headingNew">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="modal"
+                          data-target="#editModal" aria-expanded="false">
+                          Click here to add a new stop
+                        </button>
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </section>
+            <section class="row">
+              <button class="btn btn-info btn-lg" type="submit">Save</button>
+            </section>
+          </section>
+
+          <footer id="footer">
+            <nav class="navbar fixed-bottom navbar-light bg-dark">
+              <section class="container">
+                <a href="article.html">Cancel</a>
+                <button class="btn btn-info my-2 my-sm-0"  type="submit">Save</button>
+              </section>
+            </nav>
+          </footer>
+        </section>
+      </form>
+  </main>
+
+<!-- Modal images -->
+  <div class="modal fade" id="imagesModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Trip Image</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body container">
+          <section class="row">
+            <section class="col-4">
+              <figure class="figure">
+                <img
+                src="images/makteshRamon.jpg" 
+                class="figure-img img-fluid rounded" 
+                alt="ein bokek">
+                <figcaption class="figure-caption">Maktesh Ramon</figcaption>
+              </figure>
+            </section>
+            <section class="col-4">
+              <figure class="figure">
+                <img
+                src="images/einGedi.jpg" 
+                class="figure-img img-fluid rounded" 
+                alt="maayan gedi">
+                <figcaption class="figure-caption">Ein Gedi</figcaption>
+              </figure>
+            </section>
+            <section class="col-4">
+              <figure class="figure">
+                <img
+                src="images/yehudaDesert.jpg" 
+                class="figure-img img-fluid rounded" 
+                alt="mitze ramon">
+                <figcaption class="figure-caption">Judeaen Desert</figcaption>
+              </figure>
+            </section>
+          </section>
+          <section class="row">
+            <section class="col-4">
+              <figure class="figure">
+                <img 
+                src="images/deadSeaBig.jpg" 
+                class="figure-img img-fluid rounded" 
+                alt="dead sea">
+                <figcaption class="figure-caption">Dead Sea</figcaption>
+              </figure>
+            </section>
+            <section class="col-4">
+              <figure class="figure">
+                <img
+                src="images/masada.jpg" 
+                class="figure-img img-fluid rounded" 
+                alt="sde boker">
+                <figcaption class="figure-caption">Masada</figcaption>
+              </figure>
+            </section>
+          </section>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal hours -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Choose a new stop</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="timeFrom" class="col-form-label">From:</label>
+          <div class="input-group bootstrap-timepicker timepicker">
+            <input type="text" class="form-control input-small" id="timeFrom">
+            <div class="input-group-append">
+              <span class="input-group-text"><i class="fa fa-clock"></i></span>
+            </div>
+          </div>
+          <label for="timeTo" class="col-form-label">To:</label>
+          <div class="input-group bootstrap-timepicker timepicker">
+            <input type="text" class="form-control input-small" id="timeTo">
+            <div class="input-group-append">
+              <span class="input-group-text"><i class="fa fa-clock"></i></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="place" class="col-form-label">Place:</label>
+            <input type="text" class="form-control" id="place">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <script src="lib/bootstrap-timepicker.min.js"></script>
+  <script src="scripts/script.js"></script>
+  <script>
+    (initEditor());
+  </script>
+</body>
+
+</html>
