@@ -6,4 +6,4 @@ from trip.models import Trip
 
 def homepage(request):
     trips = Trip.objects.filter(created_by=request.user)
-    render(request, 'index.html', {trips: trips})
+    return render(request, 'index.html', {"trips": trips})

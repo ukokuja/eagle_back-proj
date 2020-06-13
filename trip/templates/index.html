@@ -59,69 +59,24 @@
 
     <main class="container">
         <h2 id="pageTitle">My Trips</h2>
-
         <section class="row row-cols-1 row-cols-md-3">
-            <section class="col mb-4">
+            {% for trip in trips %}
+                <section class="col mb-4">
                 <div class="card bg-light text-dark">
-                    <a href="article.html" class="stretched-link"><img src="images/sdeBoker.png" class="card-img" alt="Sde Boker"></a>
+                    <a href="article.html" class="stretched-link"><img src="{{ trip.image_url }}" class="card-img" alt="Sde Boker"></a>
                     <div class="card-body">
-                        <h5 class="card-title">Sde Boker</h5>
+                        <h5 class="card-title">{{ trip.name }}</h5>
                         <p class="card-text">128 Trips - 4k Likes & Shares</p>
-                        <p class="card-text">A two-day desert hike in the Judean Desert - from Nahal Mishmar Canyon through the desert level to the Arugot River in Nate Ein Gedi</p>
+                        <p class="card-text">{{ description }}</p>
                     </div>
                     <div class="card-img-overlay">
-                      <h5 class="card-title">Sde Boker</h5>
+                      <h5 class="card-title">{{ trip.name }}</h5>
                       <p class="card-text">128 Trips - 4k Likes & Shares</p>
                     </div>
                 </div>
             </section>
+            {% endfor %}
 
-            <section class="col mb-4">
-                <div class="card bg-light text-dark">
-                    <a href="article.html" class="stretched-link"><img src="images/deadSea.png" class="card-img" alt="Dead Sea"></a>
-                    <div class="card-body">
-                        <h5 class="card-title">Dead Sea</h5>
-                        <p class="card-text">128 Trips - 4k Likes & Shares</p>
-                        <p class="card-text">A two-day desert hike in the Judean Desert - from Nahal Mishmar Canyon through the desert level to the Arugot River in Nate Ein Gedi</p>
-                    </div>
-                    <a href="article.html">
-                      <div class="card-img-overlay">
-                        <h5 class="card-title">Dead Sea</h5>
-                        <p class="card-text">128 Trips - 4k Likes & Shares</p>
-                      </div>
-                    </a>
-                </div>
-            </section>
-
-            <section class="col mb-4">
-                <div class="card bg-light text-dark">
-                    <a href="article.html" class="stretched-link"><img src="images/mitzpeRamon.png" class="card-img" alt="Mitzpe Ramon"></a>
-                    <div class="card-body">
-                        <h5 class="card-title">Mitzpe Ramon</h5>
-                        <p class="card-text">128 Trips - 4k Likes & Shares</p>
-                        <p class="card-text">A two-day desert hike in the Judean Desert - from Nahal Mishmar Canyon through the desert level to the Arugot River in Nate Ein Gedi</p>
-                    </div>
-                    <div class="card-img-overlay">
-                      <h5 class="card-title">Mitzpe Ramon</h5>
-                      <p class="card-text">128 Trips - 4k Likes & Shares</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="col mb-4">
-                <div class="card bg-light text-dark">
-                    <a href="article.html" class="stretched-link"><img src="images/einBokek.png" class="card-img" alt="Ein Bokek"></a>
-                    <div class="card-body">
-                        <h5 class="card-title">Ein Bokek</h5>
-                        <p class="card-text">128 Trips - 4k Likes & Shares</p>
-                        <p class="card-text">A two-day desert hike in the Judean Desert - from Nahal Mishmar Canyon through the desert level to the Arugot River in Nate Ein Gedi</p>
-                    </div>
-                    <div class="card-img-overlay">
-                      <h5 class="card-title">Ein Bokek</h5>
-                      <p class="card-text">128 Trips - 4k Likes & Shares</p>
-                    </div>
-                </div>
-            </section>
 
         </section>
 

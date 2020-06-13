@@ -33,6 +33,9 @@ class Trip(BaseModel):
     drone_list = models.ManyToManyField(Drone)
     comment_list = models.ManyToManyField(Comment)
 
+    @property
+    def image_url(self):
+        return 'media/{0}'.format(self.image.image)
 
 class Stop(BaseModel):
     place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
