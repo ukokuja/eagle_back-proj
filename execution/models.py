@@ -7,11 +7,11 @@ from trip.models import Trip
 
 class Execution(BaseModel):
     duration = models.DurationField(blank=None, default=0)
-    trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True)
 
 
 class Warning(BaseModel):
     name = models.CharField(max_length=127, blank=None)
-    place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE, null=True)
     message = models.CharField(max_length=255, blank=None)
-    execution = models.ForeignKey(Execution, on_delete=models.SET_NULL, null=True)
+    execution = models.ForeignKey(Execution, on_delete=models.CASCADE, null=True)

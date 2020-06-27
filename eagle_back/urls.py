@@ -22,7 +22,8 @@ from trip import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.homepage)
+    path('', views.homepage),
+    path('/delete_trip/<trip_id>', views.delete_trip)
 ]
 
 urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

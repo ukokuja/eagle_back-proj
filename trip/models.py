@@ -13,7 +13,7 @@ ACCESSABILITY_CHOICES = (
 class Drone(BaseModel):
     name = models.CharField(max_length=127, blank=None)
     output = models.FileField(upload_to="trip/videos")
-    position = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
+    position = models.ForeignKey(Place, on_delete=models.CASCADE, null=True)
     height = models.PositiveIntegerField(blank=None, default=1)
 
 
@@ -29,9 +29,10 @@ class Trip(BaseModel):
     kids = models.PositiveIntegerField(blank=None)
     guides = models.PositiveIntegerField(blank=None, default=1)
     accessability = models.CharField(max_length=63, choices=ACCESSABILITY_CHOICES, default='HIGH')
-    image = models.ForeignKey(TripImages, on_delete=models.SET_NULL, null=True)
+    image = models.ForeignKey(TripImages, on_delete=models.CASCADE, null=True)
     drone_list = models.ManyToManyField(Drone)
-    comment_list = models.ManyToManyField(Comment)
+    is_active= models.BooleanField(default=True, blank=False)
+    # TODO: change manytomany
 
     @property
     def image_url(self):
@@ -47,10 +48,14 @@ class Destination(BaseModel):
     stop_list = models.ManyToManyField(Stop)
     start_time = models.DateTimeField(blank=None)
     stop_time = models.DateTimeField(blank=None)
-    trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True)
 
 
 class TripProperty(BaseModel):
-    trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True)
     key = models.CharField(max_length=127, blank=None)
     value = models.BooleanField(default=False, blank=None)
+
+class TripComment (models.Model):
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
