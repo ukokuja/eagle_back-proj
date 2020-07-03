@@ -17,13 +17,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-
-from trip import views
+from trip.views import homepage, delete_trip
+from login import views 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.homepage),
-    path('/delete_trip/<trip_id>', views.delete_trip)
+    path('', homepage),
+    path('/delete_trip/<trip_id>', delete_trip),
+    
+    path('register/', views.registerForm, name='registerForm'),
+    path('logout', views.logoutuser, name='logoutuser'),
+    path('login', views.loginuser, name='loginuser')
+
 ]
 
 urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
