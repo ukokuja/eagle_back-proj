@@ -484,3 +484,7 @@ main#navigationLayout {
         left: 20%;
     }
   }
+
+form button {
+    background-color: red;
+}

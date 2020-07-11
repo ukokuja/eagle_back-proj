@@ -22,7 +22,7 @@ from login import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', homepage),
+    path('', homepage, name='index'),
     path('/delete_trip/<trip_id>', delete_trip),
     
     path('register/', views.registerForm, name='registerForm'),
