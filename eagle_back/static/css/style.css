@@ -485,6 +485,150 @@ main#navigationLayout {
     }
   }
 
-form button {
-    background-color: red;
+ 
+
+/* Profile Dropdown */
+
+.profile-wrapper {
+	width:200px;
+	position:relative;
+	margin:50px auto;
 }
+.profile-wrapper::after {
+	content: '';
+	position: absolute;
+	top: 20px;
+	right: 10px;
+	border-color: #333 transparent transparent;
+	border-width: 6px;
+	border-style: solid;
+}
+.profile-wrapper::before {
+	content: '';
+	position: absolute;
+	top: 20px;
+	right: 10px;
+	border-color: #eee transparent transparent;
+	border-width: 6px;
+	border-style: solid;
+}
+.profile-wrapper:hover::after {
+	border-color: #111 transparent transparent;	
+}
+
+
+
+/* hide menu */
+.menu {
+	display:none;
+	clear:both;
+	margin:20px 0 0 0;
+}
+.menu li {
+	font-size:12px;
+	margin:0;
+  padding: 10px 4px;
+}
+.menu li a {
+	color:#555;
+}
+.menu li:hover > a{
+	color:#ffffff;
+}
+
+.menu li:hover{
+    border-left: 1px solid #111;
+    border-right: 1px solid #222;
+    border-bottom: 1px solid #222;
+    border-top: 1px solid #111;
+    border-radius: 3px;
+}
+
+/* hover profile show menu */
+.profiles:hover .menu {
+	display:block;
+}
+
+
+
+/* Login Page */
+.nav-logo {
+    display: block;
+    margin: 10px auto;
+    height: 100px;
+    width: 100px;
+    background: url("../images/logo.png") center center no-repeat;
+    background-size: 100px;
+  }
+  
+  .signin-title {
+    text-align: center;
+    margin: 5px;
+    
+  }
+
+.signin-form {
+    background: #FFF;
+    border: 1px solid #eee;
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    box-sizing: border-box;
+  }
+  
+  .signin-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .signin-form input {
+    width: 100%;
+    margin-bottom: 25px;
+  }
+  
+  .signin-form input.error {
+    border-color: red;
+    margin-bottom: 10px;
+  }
+  
+  .signin-form select {
+    margin-bottom: 25px;
+    background: url("../images/select-menu-arrow.svg") 310px center no-repeat;
+  }
+  
+  .signin-form .form-error {
+    color: red;
+    margin-bottom: 25px;
+    display: block;
+    font-size: 14px;
+  }
+  
+  .signin-form button {
+      margin-left: 40%;
+  }
+  
+  .signin-form .extras {
+    font-size: 14px;
+    color: #999;
+    margin-top: -10px;
+  }
+  
+  .signin-form .extras a {
+    color: #999;
+  }
+  
+  .signin-form .extras input {
+    width: inherit;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .signin-form .extras label {
+    margin: 0;
+  }
+
+
+
+  
