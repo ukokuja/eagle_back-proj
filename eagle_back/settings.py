@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'common',
     'trip',
     'execution',
-    'login'
+    # 'login'
 ]
 
 MIDDLEWARE = [

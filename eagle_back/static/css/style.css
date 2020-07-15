@@ -1,3 +1,4 @@
+
 *
 {
     margin: 0;
@@ -31,6 +32,10 @@ body {
     width: 100%;
     padding-top: 1px;
     background-color: white;
+}
+
+#mainTripsContainer .card-img {
+    max-height: 200px;
 }
 
 .profile {
@@ -136,7 +141,9 @@ body {
     box-shadow: 1px 1px 3px 0px #AAA;
 }
 
-
+#mainArticleLayout {
+    background-color: #F6F6F6;
+}
 .destination-image {
     height: 200px;
     background: 50%/cover no-repeat;
@@ -217,16 +224,17 @@ body {
     list-style: none;
     padding: 0;
 }
-#articleData .not-include li {
+#tripLayout #articleData .not-include li {
     background: url('../images/x.svg') 0/30px no-repeat;
 }
-#articleData .includes li {
+#tripLayout #articleData .includes li {
     background: url('../images/check.svg') 0/30px no-repeat;
 }
 
-#articleData ul li {
+#tripLayout #articleData ul li {
     padding-left: 40px;
 }
+
 #details > section > section {
     margin: 15px 0px;
 }
@@ -266,7 +274,10 @@ body {
 }
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {}
-
+#imagesModal figure img {
+    width: 100px;
+    height: 100px;
+}
 #imagesModal figure img:hover {
     border-radius: 5px;
     cursor: pointer;
@@ -487,4 +498,48 @@ main#navigationLayout {
 
 form button {
     background-color: red;
+}
+
+
+.toast {
+    float: right;
+    clear: both;
+    z-index: 10000;
+}
+#toast-container {
+    position: absolute;
+    z-index: 10000;
+    min-height: 200px;
+    width: 100%;
+    padding: 12px;
+}
+.toast.low .toast-header {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #c4deff;
+}
+.toast.low .toast-body {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #c4deff;
+}
+.toast.medium .toast-header {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #fff6da;
+}
+.toast.medium .toast-body {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #fff6da;
+}
+.toast.high .toast-header {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #eee1e3;
+}
+.toast.high .toast-body {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #eee1e3;
 }

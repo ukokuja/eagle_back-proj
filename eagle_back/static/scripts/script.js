@@ -1,4 +1,14 @@
-// Article  Javascript 
+// constants
+var warning_codes = {
+  "HIGH": 'high',
+  "MEDIUM": 'medium',
+  "LOW": 'low'
+}
+var action_codes = {
+  "ignore": ignoreFn,
+  "sos": executeSOS
+}
+// Article  Javascript
 function initArticle() {
 
 
@@ -59,18 +69,22 @@ function initEditor() {
     initFooterInteraction();
 }
 function initModalImages() {
+    var originalIid = $('header').data('id');
     var originalImage = $('header').css('background-image');
+    $("input[name='image']").val(originalIid);
+    var selectedId = originalIid;
     var selectedImage = originalImage;
     $("#imagesModal figure").click(function () {
         $("#imagesModal figure").each(function () {
             $(this).removeClass('selected');
         })
+        selectedId = $(this).children('img').data('id');
         selectedImage = $(this).children('img').attr('src');
         $(this).addClass('selected');
     })
 
     $("#imagesModal .modal-footer button:last-of-type").click(function () {
-        $("input[name='image']").val(selectedImage);
+        $("input[name='image']").val(selectedId);
         $('header').css('background-image', 'url(' + selectedImage + ')');
     })
 }
@@ -80,6 +94,8 @@ function initModalSchedule() {
         var timeFrom = button.data('timeFrom') // Extract info from data-* attributes
         var timeTo = button.data('timeTo') // Extract info from data-* attributes
         var place = button.data('place') // Extract info from data-* attributes
+        var id = button.data('id') // Extract info from data-* attributes
+        var destinations = JSON.parse($("#id_destinations").val())
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
@@ -87,6 +103,16 @@ function initModalSchedule() {
         modal.find('.modal-body #place').val(place)
         modal.find('.modal-body #timeFrom').timepicker('setTime', timeFrom)
         modal.find('.modal-body #timeTo').timepicker('setTime', timeTo)
+        $("#editModal .btn-primary").click(function () {
+          for (var i in destinations) {
+            if (destinations[i].id == id) {
+              destinations[i].start_time_parsed = $("#timeFrom").val()
+              destinations[i].stop_time_parsed = $("#timeTo").val()
+              destinations[i].name = $("#place").val()
+            }
+          }
+          $("#id_destinations").val(JSON.stringify(destinations))
+        })
     })
 }
 function initFormValidation() {
@@ -129,7 +155,7 @@ function initBinding() {
     })
 }
 //Navigate Javascript
-function initNavigator() {
+function initNavigator(executionId) {
 
     var stops = getStops();
     var drones = getDronePositions();
@@ -148,51 +174,22 @@ function initNavigator() {
     getRealtimeGeoposition(map, drones)
 
     initHamburguer();
+    initWarningListener(executionId);
 
 }
 function setDrone(map, pos) {
     var myIcon = L.icon({
-        iconUrl: 'images/drone.png',
+        iconUrl: '/static/images/drone.png',
         iconSize: [50, 50],
     });
     return L.marker(pos, { icon: myIcon }).addTo(map);
 }
 function getStops() {
-    return [{
-        name: "Ein Gedi",
-        location: [31.469835, 35.3283313],
-    },
-    {
-        name: "First stop",
-        location: [31.465169, 35.3521382],
-    },
-    {
-        name: "Second stop",
-        location: [31.459354, 35.3579443]
-    },
-    {
-        name: "Third stop",
-        location: [31.455787, 35.3677043],
-    }]
+    return stops;
 }
 
 function getDronePositions() {
-    return [{
-        name: "Back",
-        location: [31.465718, 35.3510653]
-    },
-    {
-        name: "Right",
-        location: [31.465718, 35.3516873]
-    },
-    {
-        name: "Front",
-        location: [31.465169, 35.3521382]
-    },
-    {
-        name: "Left",
-        location: [31.464931, 35.3515913]
-    }];
+    return drones;
 }
 
 function addMapWithStyle() {
@@ -244,3 +241,81 @@ function initHamburguer() {
     })
 }
 
+function initWarningListener (executionId) {
+  var interval = setInterval(function () {
+    navigator.geolocation.getCurrentPosition(function (pos){
+      $.ajax({
+          url: "get_warnings/" +executionId,
+          type: 'post',
+          data: {
+            latitude: 31.459354,
+            // latitude: pos.coords.latitude,
+            longitude: 35.3579443
+            // longitude:pos.coords.longitude
+          },
+          success: function (success) {
+            showWarnings(success)
+          },
+          dataType: 'json',
+          headers: {
+            'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+          }
+      })
+    });
+  }, 7000)
+}
+
+function showWarnings (warningList) {
+  for (var i in warningList) {
+    createWarning(warningList[i])
+    $('#toast' + warningList[i].id).toast({
+      animation: true,
+      autohide: false
+    }).toast('show');
+  }
+}
+
+function getButtons (actions) {
+  if (!actions.length) return ""
+  var elements = '<div class="btn-group btn-group-sm d-flex p-2 bd-highlight" role="group">'
+  for (var i in actions) {
+    var element =  document.createElement('button')
+    element.className = "btn btn-secondary"
+    element.setAttribute('type', 'button')
+    element.setAttribute('onclick', action_codes[actions[i].action])
+    element.innerText = actions[i].text
+    elements += element.outerHTML
+  }
+  return elements + "</div>"
+}
+function createWarning(warning) {
+    var alert = document.createElement('div');
+    alert.className = `toast ${warning_codes[warning.level]}`;
+    alert.setAttribute('id', 'toast' + warning.id)
+    alert.setAttribute('role', 'alert')
+    alert.setAttribute('aria-live', 'assertive')
+    alert.setAttribute('aria-atomic', 'true')
+    var buttons = getButtons(warning.warning_action)
+    alert.innerHTML = ` <div class="toast-header">
+    <strong class="mr-auto">Warning</strong>
+      <small>${warning.timesince}</small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body">
+      ${warning.message}
+    </div>
+    <div class="toast-footer">
+      ${buttons}
+    </div>
+`
+  document.getElementById('toast-container').prepend(alert)
+}
+
+function ignoreFn () {
+
+}
+function executeSOS () {
+
+}

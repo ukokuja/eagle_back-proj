@@ -97,7 +97,7 @@ class Migration(migrations.Migration):
 
 
     dependencies = [
-        ('trip', '0002_auto_20200627_1450'),
+        ('trip', '0001_initial'),
     ]
 
     operations = [

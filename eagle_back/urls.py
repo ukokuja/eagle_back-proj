@@ -16,15 +16,17 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
-from trip.views import homepage, delete_trip
-from login import views 
+from django.urls import path, include
+from trip.views import homepage
+
+from login import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homepage, name='index'),
-    path('/delete_trip/<trip_id>', delete_trip),
-    
+    path('navigate/', include('execution.urls')),
+    path('trip/', include('trip.urls')),
+
     path('register/', views.registerForm, name='registerForm'),
     path('logout', views.logoutuser, name='logoutuser'),
     path('login', views.loginuser, name='loginuser')
