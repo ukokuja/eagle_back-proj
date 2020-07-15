@@ -33,6 +33,10 @@ body {
     background-color: white;
 }
 
+#mainTripsContainer .card-img {
+    max-height: 200px;
+}
+
 .profile {
     display: block;
     background: url("../images/user.png") 50%/contain no-repeat;
@@ -136,7 +140,9 @@ body {
     box-shadow: 1px 1px 3px 0px #AAA;
 }
 
-
+#mainArticleLayout {
+    background-color: #F6F6F6;
+}
 .destination-image {
     height: 200px;
     background: 50%/cover no-repeat;
@@ -217,16 +223,17 @@ body {
     list-style: none;
     padding: 0;
 }
-#articleData .not-include li {
+#tripLayout #articleData .not-include li {
     background: url('../images/x.svg') 0/30px no-repeat;
 }
-#articleData .includes li {
+#tripLayout #articleData .includes li {
     background: url('../images/check.svg') 0/30px no-repeat;
 }
 
-#articleData ul li {
+#tripLayout #articleData ul li {
     padding-left: 40px;
 }
+
 #details > section > section {
     margin: 15px 0px;
 }
@@ -266,7 +273,10 @@ body {
 }
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {}
-
+#imagesModal figure img {
+    width: 100px;
+    height: 100px;
+}
 #imagesModal figure img:hover {
     border-radius: 5px;
     cursor: pointer;
@@ -485,7 +495,7 @@ main#navigationLayout {
     }
   }
 
- 
+
 
 /* Profile Dropdown */
 
@@ -513,7 +523,7 @@ main#navigationLayout {
 	border-style: solid;
 }
 .profile-wrapper:hover::after {
-	border-color: #111 transparent transparent;	
+	border-color: #111 transparent transparent;
 }
 
 
@@ -560,11 +570,11 @@ main#navigationLayout {
     background: url("../images/logo.png") center center no-repeat;
     background-size: 100px;
   }
-  
+
   .signin-title {
     text-align: center;
     margin: 5px;
-    
+
   }
 
 .signin-form {
@@ -577,58 +587,97 @@ main#navigationLayout {
     padding: 30px;
     box-sizing: border-box;
   }
-  
+
   .signin-form label {
     display: block;
     margin-bottom: 10px;
   }
-  
+
   .signin-form input {
     width: 100%;
     margin-bottom: 25px;
   }
-  
+
   .signin-form input.error {
     border-color: red;
     margin-bottom: 10px;
   }
-  
+
   .signin-form select {
     margin-bottom: 25px;
     background: url("../images/select-menu-arrow.svg") 310px center no-repeat;
   }
-  
+
   .signin-form .form-error {
     color: red;
     margin-bottom: 25px;
     display: block;
     font-size: 14px;
   }
-  
+
   .signin-form button {
       margin-left: 40%;
   }
-  
+
   .signin-form .extras {
     font-size: 14px;
     color: #999;
     margin-top: -10px;
   }
-  
+
   .signin-form .extras a {
     color: #999;
   }
-  
+
   .signin-form .extras input {
     width: inherit;
     display: inline-block;
     margin-right: 10px;
   }
-  
+
   .signin-form .extras label {
     margin: 0;
   }
 
-
-
-  
+.toast {
+    float: right;
+    clear: both;
+    z-index: 10000;
+}
+#toast-container {
+    position: absolute;
+    z-index: 10000;
+    min-height: 200px;
+    width: 100%;
+    padding: 12px;
+}
+.toast.low .toast-header {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #c4deff;
+}
+.toast.low .toast-body {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #c4deff;
+}
+.toast.medium .toast-header {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #fff6da;
+}
+.toast.medium .toast-body {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #fff6da;
+}
+.toast.high .toast-header {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #eee1e3;
+}
+.toast.high .toast-body {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #eee1e3;
+}

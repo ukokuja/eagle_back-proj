@@ -17,8 +17,11 @@ class BaseModel(models.Model):
 
 class Place(models.Model):
     name = models.CharField(max_length=127, blank=None)
-    latitude = models.IntegerField(blank=None)
-    longitude = models.IntegerField(blank=None)
+    latitude = models.FloatField(blank=None)
+    longitude = models.FloatField(blank=None)
+
+    def __str__(self):
+        return self.name
 
 class Comment(BaseModel):
     message = models.CharField(max_length=511, blank=False)

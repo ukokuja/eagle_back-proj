@@ -26,7 +26,7 @@
 
     <header>
       <section class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="index.html" id="logo">
+            <a class="navbar-brand" href="/" id="logo">
               Eagle Eye
             </a>
             
@@ -47,7 +47,7 @@
               <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Trips</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="edit.html">Add a New Trip</a>
+                  <a class="dropdown-item" href=edit/{{ trip.id }}">Add a New Trip</a>
                   <a class="dropdown-item" href="#">Upcoming Trips</a>
                   <a class="dropdown-item" href="#">Previous Trips</a>
               </div>
@@ -70,7 +70,7 @@
             {% for trip in trips %}
                 <section class="col mb-4">
                 <div class="card bg-light text-dark">
-                    <a href="article.html" class="stretched-link"><img src="{{ trip.image_url }}" class="card-img" alt="Sde Boker"></a>
+                    <a href="trip/{{ trip.id }}" class="stretched-link"><img src="{{ trip.image_url }}" class="card-img" alt="Sde Boker"></a>
                     <div class="card-body">
                         <h5 class="card-title">{{ trip.name }}</h5>
                         <p class="card-text">128 Trips - 4k Likes & Shares</p>
