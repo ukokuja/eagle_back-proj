@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'common',
     'trip',
     'execution',
-    'login',
     'users',
     'crispy_forms'
 ]
