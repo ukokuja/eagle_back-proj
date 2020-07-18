@@ -40,14 +40,15 @@
       <div class="container-md" id="wrapper">
         <section>
             <div class="btn-group btn-group-lg d-flex" role="group">
-              <a class="btn btn-light" href="/navigate/{{ trip.id }}">Start now</a>
+              <a class="btn btn-light" {% if destinations|length > 0 %}href="/navigate/{{ trip.id }}"{% else %}href="#"{% endif %}>Start now</a>
               <a class="btn btn-light" href="edit/{{ trip.id }}">Edit</a>
               <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 More
               </button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Share</a>
-                <a class="dropdown-item" href="#">Delete</a>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#shareModal">Share</a>
+                <a class="dropdown-item" href="#" data-toggle="modal"
+                   data-target="#deleteModal">Delete</a>
               </div>
             </div>
         </section>
@@ -159,7 +160,53 @@
         </section>
       </div>
     </main>
-
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalTitle">Are you sure?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            This action is irreversible
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <a class="btn btn-primary" href="delete/{{ trip.id }}">Yes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content col-12">
+                <div class="modal-header">
+                    <h5 class="modal-title">Share</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                </div>
+                <div class="modal-body">
+                    <div class="icon-container1 d-flex">
+                        <div class="smd"> <i class=" img-thumbnail fab fa-twitter fa-2x" style="color:#4c6ef5;background-color: aliceblue"></i>
+                            <p>Twitter</p>
+                        </div>
+                        <div class="smd"> <i class="img-thumbnail fab fa-facebook fa-2x" style="color: #3b5998;background-color: #eceff5;"></i>
+                            <p>Facebook</p>
+                        </div>
+                         <div class="smd"> <i class="img-thumbnail fab fa-whatsapp fa-2x" style="color: #25D366;background-color: #cef5dc;"></i>
+                            <p>Whatsapp</p>
+                        </div>
+                        <div class="smd"> <i class="img-thumbnail fab fa-facebook-messenger fa-2x" style="color: #3b5998;background-color: #eceff5;"></i>
+                            <p>Messenger</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"> <label style="font-weight: 600">Page Link <span class="message"></span></label><br />
+                    <div class="row"> <input class="col-10 ur" type="url"value="https://eagle.io/trips/{{trip.id}}" id="myInput" aria-describedby="inputGroup-sizing-default" style="height: 40px;"> <button class="cpy" onclick="copyShare()"><i class="far fa-clone"></i></button> </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

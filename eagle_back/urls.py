@@ -19,15 +19,13 @@ from django.contrib import admin
 from django.urls import path,include
 from trip.views import homepage, delete_trip, create_trip
 from users import views as user_views
-from common.views import settingsView 
+from common.views import settingsView
 from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homepage, name='index'),
-    path('delete_trip/<trip_id>', delete_trip),
-    path('create_trip/<trip_id>', create_trip),
     path('settings/', settingsView, name='settings'),
     path('navigate/', include('execution.urls')),
     path('trip/', include('trip.urls')),

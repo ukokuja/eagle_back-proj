@@ -32,7 +32,6 @@
                     <ul>
                         <li><a href="#"><i class="fa fa-exclamation-triangle"></i>Warnings</a> <span class="badge badge-danger">3</span></li>
                         <li><a href="#"><i class="fa fa-satellite-dish"></i>Live Feed</a></li>
-                        <li><a href="#"><i class="fa fa-route"></i>Edit Route</a></li>
                         <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
                     </ul>
                 </section>
@@ -73,7 +72,7 @@
         <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
         integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
         <script>
-            var stops = {{ stops  |safe }};
+            var destinations = {{ destinations  |safe }};
             var drones = {{ drones |safe}};
         </script>
         <script src="{% static "scripts/script.js" %}"></script>

@@ -24,6 +24,9 @@ function initArticle() {
 
     initSeeMore();
 }
+function copyShare() {
+  $(".message").text("link copied");
+}
 function initSeeMore () {
     $('#description .expand').click(function(element) {
         $(this).parent().toggleClass('open');
@@ -58,15 +61,64 @@ function initFooterInteraction(form) {
         $(form).submit();
     })
 }
+var editorMapProps = {
+  editMarker: false,
+  isMapInitialized: false,
+  map: false
+}
+function getDestinationHTML (destination) {
+  return `
+          <div class="card border-light mb-3">
+             <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                   <button class="btn btn-link text-left" type="button" data-toggle="collapse"
+                      data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                   ${destination.start_time_parsed} - ${ destination.stop_time_parsed} - ${ destination.name }
+                   </button>
+                   <button class="btn btn-link" type="button" data-target="#editModal"
+                      data-id="${ destination.id }"
+                      data-time-from="${ destination.start_time_parsed}"
+                      data-time-to="${ destination.stop_time_parsed}" data-place="${ destination.name }"
+                      data-description="${ destination.description }" aria-expanded="true"
+                      aria-controls="collapseOne"
+                      data-toggle="modal">
+                   <i class="fa fa-edit"></i>
+                   </button>
+                   <button class="btn btn-link" type="button" data-target="#collapseOne" aria-expanded="true"
+                      aria-controls="collapseOne">
+                   <i class="far fa-trash-alt"></i>
+                   </button>
+                </h2>
+             </div>
+             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                data-parent="#accordionExample">
+                <div class="card-body">
+                   ${ destination.description }
+                </div>
+             </div>
+          </div>`
+}
+function renderDestinations () {
+  $("#destinationContainer").html("")
+  var destinations = JSON.parse($("#id_destinations").val())
+  for (var i in destinations) {
+    var html = getDestinationHTML(destinations[i])
+    var newDestination = document.createElement('div')
+    newDestination.className = "accordion"
+    newDestination.setAttribute('id', 'accordionExample')
+    newDestination.innerHTML = html
+    $("#destinationContainer").append(newDestination)
+  }
+}
 function initEditor() {
 
     // Loop over them and prevent submission
-
     var form = initFormValidation();
     initBinding();
     initModalSchedule();
     initModalImages();
     initFooterInteraction();
+    renderDestinations();
 }
 function initModalImages() {
     var originalIid = $('header').data('id');
@@ -88,31 +140,88 @@ function initModalImages() {
         $('header').css('background-image', 'url(' + selectedImage + ')');
     })
 }
+
+function setModalFields(place, description, timeFrom, timeTo) {
+  var modal = $(this)
+  modal.find('.modal-title').text(place || "Choose a new stop")
+  modal.find('.modal-body #place').val(place)
+  modal.find('.modal-body #descriptionField').val(description)
+  modal.find('.modal-body #timeFrom').timepicker({'showMeridian': false})
+  modal.find('.modal-body #timeTo').timepicker({'showMeridian': false})
+  modal.find('.modal-body #timeFrom').timepicker('setTime', timeFrom)
+  modal.find('.modal-body #timeTo').timepicker('setTime', timeTo)
+}
+
+function saveDestiantions(destinations, id) {
+  $("#editModal .btn-primary").click(function () {
+    var position = editorMapProps.editMarker.getLatLng()
+    destination = destinations.find(d => d.id == id) || {
+      stop: {
+        place: {}
+      }
+    }
+    destination.start_time_parsed = $("#timeFrom").val()
+    destination.stop_time_parsed = $("#timeTo").val()
+    destination.name = $("#place").val()
+    destination.description = $("#descriptionField").val()
+    destination.stop.place.longitude = position.lng
+    destination.stop.place.latitude = position.lat
+    if (!id)  {
+      destinations.push(destination)
+    }
+    $("#id_destinations").val(JSON.stringify(destinations))
+    renderDestinations();
+  })
+}
+
+function getDestinationParameters(button) {
+  var timeFrom = button.data('timeFrom') // Extract info from data-* attributes
+  var timeTo = button.data('timeTo') // Extract info from data-* attributes
+  var place = button.data('place') // Extract info from data-* attributes
+  var description = button.data('description') // Extract info from data-* attributes
+  var id = button.data('id') // Extract info from data-* attributes
+  return {timeFrom, timeTo, place, description, id};
+}
+
+function setEditModalMap(destinations, id) {
+  var stops = getStops(destinations);
+  var centerLocation = [31.4664, 35.387983]
+  if (stops.length > 0) {
+    centerLocation = stops[stops.length - 1].location
+    if (id && id > -1) {
+      centerLocation = stops.find(s => s.id == id).location
+    }
+  }
+  var map = addMapWithStyle(centerLocation);
+  var dots = [];
+  for (var i in stops) {
+    var marker = L.marker(stops[i].location).addTo(map);
+    if (stops[i].id == id) editorMapProps.editMarker = marker
+    dots.push(stops[i].location)
+  }
+  // var line = initPath(dots, map);
+  setTimeout(function(){
+    map.invalidateSize()
+  }, 2000)
+
+  if (!id) {
+    editorMapProps.editMarker = new L.marker(centerLocation)
+  }
+  map.on('click', function (e){
+    if (editorMapProps.editMarker) map.removeLayer(editorMapProps.editMarker)
+    editorMapProps.editMarker = new L.marker(e.latlng).addTo(map);
+  });
+}
+
+
 function initModalSchedule() {
-    $('#editModal').on('show.bs.modal', function (event) {
+    var destinations = JSON.parse($("#id_destinations").val())
+  $('#editModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
-        var timeFrom = button.data('timeFrom') // Extract info from data-* attributes
-        var timeTo = button.data('timeTo') // Extract info from data-* attributes
-        var place = button.data('place') // Extract info from data-* attributes
-        var id = button.data('id') // Extract info from data-* attributes
-        var destinations = JSON.parse($("#id_destinations").val())
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this)
-        modal.find('.modal-title').text(place || "Choose a new stop")
-        modal.find('.modal-body #place').val(place)
-        modal.find('.modal-body #timeFrom').timepicker('setTime', timeFrom)
-        modal.find('.modal-body #timeTo').timepicker('setTime', timeTo)
-        $("#editModal .btn-primary").click(function () {
-          for (var i in destinations) {
-            if (destinations[i].id == id) {
-              destinations[i].start_time_parsed = $("#timeFrom").val()
-              destinations[i].stop_time_parsed = $("#timeTo").val()
-              destinations[i].name = $("#place").val()
-            }
-          }
-          $("#id_destinations").val(JSON.stringify(destinations))
-        })
+        var {timeFrom, timeTo, place, description, id} = getDestinationParameters(button);
+        setModalFields.call(this, place, description, timeFrom, timeTo);
+        setEditModalMap(destinations, id);
+        saveDestiantions(destinations, id);
     })
 }
 function initFormValidation() {
@@ -157,9 +266,9 @@ function initBinding() {
 //Navigate Javascript
 function initNavigator(executionId) {
 
-    var stops = getStops();
+    var stops = getStops(destinations);
     var drones = getDronePositions();
-    var map = addMapWithStyle();
+    var map = addMapWithStyle(drones[0].location);
     for (var i in drones) {
         drones[i].drone = setDrone(map, drones[i].location)
     }
@@ -184,22 +293,35 @@ function setDrone(map, pos) {
     });
     return L.marker(pos, { icon: myIcon }).addTo(map);
 }
-function getStops() {
-    return stops;
+function getStops(destinations) {
+    var stops = []
+    for (var i in destinations) {
+      stops.push({
+        "id": destinations[i].id,
+        "name": destinations[i].stop.place.name ,
+        "location": [
+            destinations[i].stop.place.latitude,
+            destinations[i].stop.place.longitude]
+      })
+    }
+    return stops
 }
 
 function getDronePositions() {
     return drones;
 }
 
-function addMapWithStyle() {
-    var map = L.map('map', {
-        center: [31.4664, 35.387983],
-        zoom: 5,
-        preferCanvas: true,
-        zoomControl: false,
-        maxZoom: 20
-    });
+function addMapWithStyle(center) {
+    if (!editorMapProps.isMapInitialized) {
+      editorMapProps.isMapInitialized = true
+      editorMapProps.map = L.map('map', {
+          center: center,
+          zoom: 5,
+          preferCanvas: true,
+          zoomControl: false,
+          maxZoom: 20
+      });
+    }
     // couche OpenStreetMap
     var Jawg_Dark = L.tileLayer('https://{s}.tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
         attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -208,15 +330,15 @@ function addMapWithStyle() {
         subdomains: 'abcd',
         accessToken: 'R8kO0sUL739jOGWGaqGxQ5B9zaioziEMlP0RKMX7ZCIQ80LCmSmmQTuMqUFCs104'
     });
-    map.addLayer(Jawg_Dark);
+    editorMapProps.map.addLayer(Jawg_Dark);
 
-    map.setView(new L.LatLng(31.465718, 35.3510653), 17);
+    editorMapProps.map.setView(new L.LatLng(center[0], center[1]), 17);
     
-    return map;
+    return editorMapProps.map;
 }
 
 function initPath(dots, map) {
-    var polyline = L.polyline(dots, {
+    return L.polyline(dots, {
         color: '#AAA', dashArray: "20, 15", weight: 5,
         lineJoin: 'round'
     }).addTo(map);

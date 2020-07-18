@@ -65,17 +65,19 @@ class TripDrone (models.Model):
 
 class Stop(BaseModel):
     place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
-    picture = models.ImageField(upload_to="trip/images")
+    picture = models.ImageField(upload_to="trip/images", null=True, blank=True)
 
 
 class Destination(BaseModel):
     name = models.CharField(max_length=127, blank=None)
-    stop_list = models.ManyToManyField(Stop)
-    start_time = models.DateTimeField(blank=None)
-    stop_time = models.DateTimeField(blank=None)
+    stop = models.ForeignKey(Stop, on_delete=models.SET_NULL, null=True)
+    start_time = models.TimeField(blank=None)
+    stop_time = models.TimeField(blank=None)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True)
     description = models.CharField(max_length=511, blank=None, default="")
 
+    class Meta():
+        unique_together= ('trip', 'name')
     @property
     def start_time_parsed(self):
         return self.start_time.strftime("%H:%M")
@@ -110,7 +112,7 @@ class TripForm(ModelForm):
     class Meta:
         model= Trip
         fields = '__all__'
-        exclude = ['is_active', 'drone_list','created_by', 'modified_by']
+        exclude = ['is_active', 'drone_list', 'modified_by']
         widgets = {
             'name': forms.TextInput(attrs=FORM_CONTROL),
             'description':forms.Textarea(attrs={'class': "form-control no-validate"}),
@@ -118,7 +120,8 @@ class TripForm(ModelForm):
             'kids':forms.NumberInput(attrs=FORM_CONTROL),
             'guides':forms.NumberInput(attrs=FORM_CONTROL),
             'accessability':forms.RadioSelect,
-            'image': forms.HiddenInput()
+            'image': forms.HiddenInput(),
+            'created_by': forms.HiddenInput()
         }
 
     def __init__(self, *args, **kwargs):
@@ -127,8 +130,10 @@ class TripForm(ModelForm):
             includes = kwargs.pop('includes')
             not_includes = kwargs.pop('not_includes')
             destinations = kwargs.pop('destinations')
+            created_by = kwargs.pop('created_by')
         super(TripForm, self).__init__(*args, **kwargs)
         if is_set:
             self.fields['includes'].initial = includes
             self.fields['not_includes'].initial = not_includes
             self.fields['destinations'].initial = destinations
+            self.fields['created_by'].initial = created_by

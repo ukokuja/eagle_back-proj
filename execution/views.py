@@ -11,6 +11,8 @@ from execution.serializers import WarningSerializer
 from trip.models import Destination
 import geopy.distance
 
+from trip.serializers import DestinationSerializer
+
 
 def get_places(list, prop):
     places_ids = [x.get(prop) for x in list.values()]
@@ -20,11 +22,10 @@ def get_places(list, prop):
 
 def navigate(request, trip_id):
     execution = Execution.objects.create(trip_id=trip_id)
-    destination = Destination.objects.get(trip_id=trip_id)
-    stops = get_places(destination.stop_list, 'place_id')
+    destinations = DestinationSerializer(Destination.objects.filter(trip_id=trip_id), many=True).data
     drones = get_places(execution.trip.drone_list, 'position_id')
 
-    return render(request, "navigate.html", {"execution": execution, "stops": stops, "drones": drones})
+    return render(request, "navigate.html", {"execution": execution, "destinations": json.dumps(destinations) , "drones": drones})
 
 
 def get_warnings (request, execution_id):

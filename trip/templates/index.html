@@ -47,7 +47,7 @@
               <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Trips</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href=edit/{{ trip.id }}">Add a New Trip</a>
+                  <a class="dropdown-item" href="trip/create">Add a New Trip</a>
                   <a class="dropdown-item" href="#">Upcoming Trips</a>
                   <a class="dropdown-item" href="#">Previous Trips</a>
               </div>
@@ -73,12 +73,10 @@
                     <a href="trip/{{ trip.id }}" class="stretched-link"><img src="{{ trip.image_url }}" class="card-img" alt="Sde Boker"></a>
                     <div class="card-body">
                         <h5 class="card-title">{{ trip.name }}</h5>
-                        <p class="card-text">128 Trips - 4k Likes & Shares</p>
                         <p class="card-text">{{ trip.description }}</p>
                     </div>
                     <div class="card-img-overlay">
                       <h5 class="card-title">{{ trip.name }}</h5>
-                      <p class="card-text">128 Trips - 4k Likes & Shares</p>
                     </div>
                 </div>
             </section>
