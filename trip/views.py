@@ -17,7 +17,27 @@ def delete_trip(request, trip_id):
     trip.is_active = False
     trip.save()
 
+def create_trip(request, trip_id):
+    trip = Trip.objects.get(id=trip_id)
+    images = TripImages.objects.filter(created_by=request.user)
+    destination_qs = Destination.objects.filter(trip=trip)
+    destinations = SimpleDestinationSerializer(destination_qs, many=True).data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = TripForm(request.POST, instance=trip, **{"is_set": False})
+        # check whether it's valid:
+        if form.is_valid():
+            data = form.cleaned_data
+            set_trip_properties(data, trip)
+            set_destinations(data)
+            form.save()
+            return redirect('trip', trip_id)
 
+        # if a GET (or any other method) we'll create a blank form
+    else:
+        includes, not_includes = get_trip_properties(trip)
+        form = TripForm(instance=trip, **{"includes":includes, "not_includes":not_includes, "is_set": True, "destinations": json.dumps(destinations)})
+    return render(request, 'edit.html', {"trip": trip, 'form': form, "images": images, "destinations": destinations})
 
 def article(request, trip_id):
     trip = Trip.objects.get(id=trip_id)
