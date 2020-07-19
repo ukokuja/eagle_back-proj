@@ -416,6 +416,17 @@ function showWarnings (warningList) {
   }
 }
 
+function renderWarnings (warningList) {
+  $("#warningContainerHigh").html("")
+  for (var i in warningList) {
+    var newWarning = `
+    <div class="warning1">
+        ${warningList[i].message}
+    </div>
+    `
+    $("#warningContainerHigh").append(newWarning.innerHTML)
+  }
+}
 
 function getButtons (actions) {
   if (!actions.length) return ""

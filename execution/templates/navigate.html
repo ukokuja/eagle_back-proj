@@ -30,8 +30,154 @@
                 </section>
                 <section>
                     <ul>
-                        <li><a href="#"><i class="fa fa-exclamation-triangle"></i>Warnings</a> <span class="badge badge-danger">3</span></li>
+                        <li><a href="#warningContainer" data-toggle="modal" data-target="#warningContainer"><i class="fa fa-exclamation-triangle"></i>Warnings</a> <span class="badge badge-danger">3</span></li>
+
+
+                          <!-- Warning Modal -->
+                          <div class="modal fade warningContainer" tabindex="-1" role="dialog" aria-labelledby="warningContainer" aria-hidden="true" id="warningContainer">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Warnings</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+
+                                  <div class="row">
+                                    <div class="col-4">
+                                      <div class="list-group" id="list-tab" role="tablist">
+                                        <a class="list-group-item list-group-item-action active list-group-item-danger" id="list-high-list" data-toggle="list" href="#list-high" role="tab" aria-controls="high">High Alert</a>
+                                        <a class="list-group-item list-group-item-action list-group-item-warning" id="list-low-list" data-toggle="list" href="#list-low" role="tab" aria-controls="low">Low Alert</a>
+                                        <a class="list-group-item list-group-item-action list-group-item-info" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>
+                                        <!-- <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a> -->
+                                      </div>
+                                    </div>
+                                    <div class="col-8">
+                                      <div class="tab-content" id="nav-tabContent">
+
+
+                                        <div class="tab-pane fade show active" id="list-high" role="tabpanel" aria-labelledby="list-high-list">
+                                          <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Landslide ahead- route change mandatory
+                                              <span class="badge badge-primary badge-pill">2 mins ago</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Lost kid- 50m from group
+                                              <span class="badge badge-primary badge-pill">10 mins ago</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Kid hurt from rock
+                                              <span class="badge badge-primary badge-pill">20 mins ago</span>
+                                            </li>
+                                          </ul>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="list-low" role="tabpanel" aria-labelledby="list-low-list">
+                                          <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              High temperatures outside- Drink Water!
+                                              <span class="badge badge-primary badge-pill">1 mins ago</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Low drone(4) battery
+                                              <span class="badge badge-primary badge-pill">15 mins ago</span>
+                                            </li>
+                                          </ul>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+                                          <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Bathroom break needed in 3rd section
+                                              <span class="badge badge-primary badge-pill">2 mins ago</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Water break advised
+                                              <span class="badge badge-primary badge-pill">4 mins ago</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Stop coming up ahead
+                                              <span class="badge badge-primary badge-pill">40 mins ago</span>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                        <!-- <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div> -->
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
                         <li><a href="#"><i class="fa fa-satellite-dish"></i>Live Feed</a></li>
+
+                        <!-- Modal -->
+                            <div class="modal fade bannerformmodalDrone" tabindex="-1" role="dialog" aria-labelledby="bannerformmodalDrone" aria-hidden="true" id="bannerformmodalDrone">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Live Feed</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+
+                                    <div class="row">
+                                      <div class="col-4">
+                                        <div class="list-group" id="list-tab" role="tablist">
+                                          <a class="list-group-item list-group-item-action active list-group-item-primary" id="list-one-list" data-toggle="list" href="#list-one" role="tab" aria-controls="one">Drone 1</a>
+                                          <a class="list-group-item list-group-item-action list-group-item-primary" id="list-two-list" data-toggle="list" href="#list-two" role="tab" aria-controls="two">Drone 2</a>
+                                          <a class="list-group-item list-group-item-action list-group-item-primary" id="list-three-list" data-toggle="list" href="#list-three" role="tab" aria-controls="three">Drone 3</a>
+                                          <a class="list-group-item list-group-item-action list-group-item-primary" id="list-four-list" data-toggle="list" href="#list-four" role="tab" aria-controls="four">Drone 4</a>
+                                        </div>
+                                      </div>
+                                      <div class="col-8">
+                                        <div class="tab-content" id="nav-tabContent">
+
+
+                                          <div class="tab-pane fade show active" id="list-one" role="tabpanel" aria-labelledby="list-one-list">
+                                            <video width="320" height="240" controls>
+                                              <source src="{{drones_videos[0]}}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                            </video>
+                                          </div>
+
+                                          <div class="tab-pane fade" id="list-two" role="tabpanel" aria-labelledby="list-two-list">
+
+                                          </div>
+
+                                          <div class="tab-pane fade" id="list-three" role="tabpanel" aria-labelledby="list-three-list">
+
+                                          </div>
+
+                                          <div class="tab-pane fade" id="list-four" role="tabpanel" aria-labelledby="list-four-list">
+
+
+                                          </div> 
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
                         <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
                     </ul>
                 </section>
@@ -63,18 +209,20 @@
                 </section>
             </section>
         </footer> 
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+
+
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
-        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
         <script>
             var destinations = {{ destinations  |safe }};
             var drones = {{ drones |safe}};
         </script>
-        <script src="{% static "scripts/script.js" %}"></script>
+        <script src="{% static 'scripts/script.js' %}"></script>
         <script>
             (initNavigator({{ execution.id }}));
         </script>

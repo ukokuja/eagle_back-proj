@@ -1,0 +1,158 @@
+[1mdiff --git a/common/__pycache__/models.cpython-38.pyc b/common/__pycache__/models.cpython-38.pyc[m
+[1mindex 6688a5d..2cb5b50 100644[m
+Binary files a/common/__pycache__/models.cpython-38.pyc and b/common/__pycache__/models.cpython-38.pyc differ
+[1mdiff --git a/eagle_back/__pycache__/settings.cpython-38.pyc b/eagle_back/__pycache__/settings.cpython-38.pyc[m
+[1mindex e3d159b..a98bffe 100644[m
+Binary files a/eagle_back/__pycache__/settings.cpython-38.pyc and b/eagle_back/__pycache__/settings.cpython-38.pyc differ
+[1mdiff --git a/eagle_back/__pycache__/urls.cpython-38.pyc b/eagle_back/__pycache__/urls.cpython-38.pyc[m
+[1mindex cd63631..f56f1ef 100644[m
+Binary files a/eagle_back/__pycache__/urls.cpython-38.pyc and b/eagle_back/__pycache__/urls.cpython-38.pyc differ
+[1mdiff --git a/execution/__pycache__/views.cpython-38.pyc b/execution/__pycache__/views.cpython-38.pyc[m
+[1mindex 7e50d0c..601b964 100644[m
+Binary files a/execution/__pycache__/views.cpython-38.pyc and b/execution/__pycache__/views.cpython-38.pyc differ
+[1mdiff --git a/execution/templates/navigate.html b/execution/templates/navigate.html[m
+[1mindex 3809014..f3fcabd 100644[m
+[1m--- a/execution/templates/navigate.html[m
+[1m+++ b/execution/templates/navigate.html[m
+[36m@@ -12,10 +12,10 @@[m
+             integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="[m
+             crossorigin=""/>[m
+         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">[m
+[31m-        <link rel="stylesheet" href="{% static "css/style.css" %}">[m
+[31m-        <link rel="icon" type="image/png" sizes="32x32" href="{% static "images/favicon/favicon-32x32.png" %}">[m
+[31m-        <link rel="icon" type="image/png" sizes="96x96" href="{% static "images/favicon/favicon-96x96.png" %}">[m
+[31m-        <link rel="icon" type="image/png" sizes="16x16" href="{% static "images/favicon/favicon-16x16.png" %}">[m
+[32m+[m[32m        <link rel="stylesheet" href="{% static 'css/style.css' %}">[m
+[32m+[m[32m        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">[m
+[32m+[m[32m        <link rel="icon" type="image/png" sizes="96x96" href="{% static 'images/favicon/favicon-96x96.png' %}">[m
+[32m+[m[32m        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}">[m
+         {% csrf_token %}[m
+     </head>[m
+     <body id="navigationLayout">[m
+[36m@@ -30,7 +30,89 @@[m
+                 </section>[m
+                 <section>[m
+                     <ul>[m
+[31m-                        <li><a href="#"><i class="fa fa-exclamation-triangle"></i>Warnings</a> <span class="badge badge-danger">3</span></li>[m
+[32m+[m[32m                        <li><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"></a><i class="fa fa-exclamation-triangle"></i>Warnings</a> <span class="badge badge-danger">3</span></li>[m
+[32m+[m[32m                        <li>  <a href="#bannerformmodal" data-toggle="modal" data-target="#bannerformmodal">Warnings</a>[m
+[32m+[m[32m                            <div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="bannerformmodal">[m
+[32m+[m[32m                              <div class="modal-dialog" role="document">[m
+[32m+[m[32m                                <div class="modal-content">[m
+[32m+[m[32m                                  <div class="modal-header">[m
+[32m+[m[32m                                    <h5 class="modal-title" id="exampleModalLabel">Warnings</h5>[m
+[32m+[m[32m                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">[m
+[32m+[m[32m                                      <span aria-hidden="true">&times;</span>[m
+[32m+[m[32m                                    </button>[m
+[32m+[m[32m                                  </div>[m
+[32m+[m[32m                                  <div class="modal-body">[m
+[32m+[m[41m                            [m
+[32m+[m[32m                                    <div class="row">[m
+[32m+[m[32m                                      <div class="col-4">[m
+[32m+[m[32m                                        <div class="list-group" id="list-tab" role="tablist">[m
+[32m+[m[32m                                          <a class="list-group-item list-group-item-action active list-group-item-danger" id="list-high-list" data-toggle="list" href="#list-high" role="tab" aria-controls="high">High Alert</a>[m
+[32m+[m[32m                                          <a class="list-group-item list-group-item-action list-group-item-warning" id="list-low-list" data-toggle="list" href="#list-low" role="tab" aria-controls="low">Low Alert</a>[m
+[32m+[m[32m                                          <a class="list-group-item list-group-item-action list-group-item-info" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>[m
+[32m+[m[32m                                        </div>[m
+[32m+[m[32m                                      </div>[m
+[32m+[m[32m                                      <div class="col-8">[m
+[32m+[m[32m                                        <div class="tab-content" id="nav-tabContent">[m
+[32m+[m[41m                            [m
+[32m+[m[41m                            [m
+[32m+[m[32m                                          <div class="tab-pane fade show active" id="list-high" role="tabpanel" aria-labelledby="list-high-list">[m
+[32m+[m[32m                                            <ul class="list-group">[m
+[32m+[m[32m                                              <li class="list-group-item d-flex justify-content-between align-items-center">[m
+[32m+[m[32m                                                Landslide ahead- route change mandatory[m
+[32m+[m[32m                                                <span class="badge badge-primary badge-pill">2 mins ago</span>[m
+[32m+[m[32m                                              </li>[m
+[32m+[m[32m                                              <li class="list-group-item d-flex justify-content-between align-items-center">[m
+[32m+[m[32m                                                Lost kid- 50m from group[m
+[32m+[m[32m                                                <span class="badge badge-primary badge-pill">10 mins ago</span>[m
+[32m+[m[32m                                              </li>[m
+[32m+[m[32m                                              <li class="list-group-item d-flex justify-content-between align-items-center">[m
+[32m+[m[32m                                                Kid hurt from rock[m
+[32m+[m[32m                                                <span class="badge badge-primary badge-pill">20 mins ago</span>[m
+[32m+[m[32m                                              </li>[m
+[32m+[m[32m                                            </ul>[m
+[32m+[m[32m                                          </div>[m
+[32m+[m[41m                            [m
+[32m+[m[32m                                          <div class="tab-pane fade" id="list-low" role="tabpanel" aria-labelledby="list-low-list">[m
+[32m+[m[32m                                            <ul class="list-group">[m
+[32m+[m[32m                                              <li class="list-group-item d-flex justify-content-between align-items-center">[m
+[32m+[m[32m                                                High temperatures outside- Drink Water![m
+[32m+[m[32m                                                <span class="badge badge-primary badge-pill">1 mins ago</span>[m
+[32m+[m[32m                                              </li>[m
+[32m+[m[32m                                              <li class="list-group-item d-flex justify-content-between align-items-center">[m
+[32m+[m[32m                                                Low drone(4) battery[m
+[32m+[m[32m                                                <span class="badge badge-primary badge-pill">15 mins ago</span>[m
+[32m+[m[32m                                              </li>[m
+[32m+[m[32m                                            </ul>[m
+[32m+[m[32m                                          </div>[m
+[32m+[m[41m                            [m
+[32m+[m[32m                                          <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">[m
+[32m+[m[32m                                            <ul class="list-group">[m
+[32m+[m[32m                                              <li class="list-group-item d-flex justify-content-between align-items-center">[m
+[32m+[m[32m                                                Bathroom break needed in 3rd section[m
+[32m+[m[32m                                                <span class="badge badge-primary badge-pill">2 mins ago</span>[m
+[32m+[m[32m                                              </li>[m
+[32m+[m[32m                                              <li class="list-group-item d-flex justify-content-between align-items-center">[m
+[32m+[m[32m                                                Water break advised[m
+[32m+[m[32m                                                <span class="badge badge-primary badge-pill">4 mins ago</span>[m
+[32m+[m[32m                                              </li>[m
+[32m+[m[32m                                              <li class="list-group-item d-flex justify-content-between align-items-center">[m
+[32m+[m[32m                                                Stop coming up ahead[m
+[32m+[m[32m                                                <span class="badge badge-primary badge-pill">40 mins ago</span>[m
+[32m+[m[32m                                              </li>[m
+[32m+[m[32m                                            </ul>[m
+[32m+[m[32m                                          </div>[m
+[32m+[m[32m                                          <!-- <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div> -->[m
+[32m+[m[32m                                        </div>[m
+[32m+[m[32m                                      </div>[m
+[32m+[m[32m                                    </div>[m
+[32m+[m[41m                            [m
+[32m+[m[32m                                  </div>[m
+[32m+[m[32m                                  <div class="modal-footer">[m
+[32m+[m[32m                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>[m
+[32m+[m[32m                                  </div>[m
+[32m+[m[32m                                </div>[m
+[32m+[m[32m                              </div>[m
+[32m+[m[32m                            </div></li>[m
+                         <li><a href="#"><i class="fa fa-satellite-dish"></i>Live Feed</a></li>[m
+                         <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>[m
+                     </ul>[m
+[36m@@ -74,7 +156,7 @@[m
+             var destinations = {{ destinations  |safe }};[m
+             var drones = {{ drones |safe}};[m
+         </script>[m
+[31m-        <script src="{% static "scripts/script.js" %}"></script>[m
+[32m+[m[32m        <script src="{% static 'scripts/script.j' %}"></script>[m
+         <script>[m
+             (initNavigator({{ execution.id }}));[m
+         </script>[m
+[1mdiff --git a/trip/__pycache__/admin.cpython-38.pyc b/trip/__pycache__/admin.cpython-38.pyc[m
+[1mindex 00cfa27..844ee67 100644[m
+Binary files a/trip/__pycache__/admin.cpython-38.pyc and b/trip/__pycache__/admin.cpython-38.pyc differ
+[1mdiff --git a/trip/__pycache__/models.cpython-38.pyc b/trip/__pycache__/models.cpython-38.pyc[m
+[1mindex f4ace8f..9998cfd 100644[m
+Binary files a/trip/__pycache__/models.cpython-38.pyc and b/trip/__pycache__/models.cpython-38.pyc differ
+[1mdiff --git a/trip/__pycache__/serializers.cpython-38.pyc b/trip/__pycache__/serializers.cpython-38.pyc[m
+[1mindex 865766e..7daa17c 100644[m
+Binary files a/trip/__pycache__/serializers.cpython-38.pyc and b/trip/__pycache__/serializers.cpython-38.pyc differ
+[1mdiff --git a/trip/__pycache__/urls.cpython-38.pyc b/trip/__pycache__/urls.cpython-38.pyc[m
+[1mindex bd8876c..1d5b9c6 100644[m
+Binary files a/trip/__pycache__/urls.cpython-38.pyc and b/trip/__pycache__/urls.cpython-38.pyc differ
+[1mdiff --git a/trip/__pycache__/views.cpython-38.pyc b/trip/__pycache__/views.cpython-38.pyc[m
+[1mindex 916a135..baf2339 100644[m
+Binary files a/trip/__pycache__/views.cpython-38.pyc and b/trip/__pycache__/views.cpython-38.pyc differ
+[1mdiff --git a/users/__pycache__/admin.cpython-38.pyc b/users/__pycache__/admin.cpython-38.pyc[m
+[1mindex 05941c8..ad3206a 100644[m
+Binary files a/users/__pycache__/admin.cpython-38.pyc and b/users/__pycache__/admin.cpython-38.pyc differ
+[1mdiff --git a/users/__pycache__/forms.cpython-38.pyc b/users/__pycache__/forms.cpython-38.pyc[m
+[1mindex b30a218..4a9454c 100644[m
+Binary files a/users/__pycache__/forms.cpython-38.pyc and b/users/__pycache__/forms.cpython-38.pyc differ
+[1mdiff --git a/users/__pycache__/models.cpython-38.pyc b/users/__pycache__/models.cpython-38.pyc[m
+[1mindex c041be6..9998408 100644[m
+Binary files a/users/__pycache__/models.cpython-38.pyc and b/users/__pycache__/models.cpython-38.pyc differ
+[1mdiff --git a/users/__pycache__/views.cpython-38.pyc b/users/__pycache__/views.cpython-38.pyc[m
+[1mindex 201261f..baeb01f 100644[m
+Binary files a/users/__pycache__/views.cpython-38.pyc and b/users/__pycache__/views.cpython-38.pyc differ
