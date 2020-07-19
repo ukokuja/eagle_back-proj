@@ -1,15 +1,9 @@
-// constants
-var warningCodes = {
-  "HIGH": 'high',
-  "MEDIUM": 'medium',
-  "LOW": 'low'
-}
-var warningSdk = {
-  "ignore": ignoreFn,
-  "sos": executeSOSFn,
-  "escalate": escalateFn,
-  "snooze": snooze
-}
+// globals
+var warningCodes = {}
+var warningSdk = {}
+var ignoredWarnings = []
+var displayingWarnings = []
+var currentMainDronePosition = [1,1]
 // data
 var editorMapProps = {
   editMarker: false,
@@ -284,7 +278,12 @@ function initBinding() {
 
 //Navigate Javascript
 function initNavigator(executionId) {
-
+    $.getJSON('/static/json/warningSdk.json', {},function (data){
+      warningSdk = data
+    })
+    $.getJSON('/static/json/warningCodes.json', {},function (data){
+      warningCodes = data
+    })
     var stops = getStops(destinations);
     var drones = getDronePositions();
     var map = addMapWithStyle(drones[0].location);
@@ -297,9 +296,9 @@ function initNavigator(executionId) {
         dots.push(stops[i].location)
     }
 
-    initPath(dots, map);
+    var lines = initPath(dots, map);
 
-    getRealtimeGeoposition(map, drones)
+    getRealtimeGeoposition(map, drones, lines.getLatLngs())
 
     initHamburguer();
     initWarningListener(executionId);
@@ -363,11 +362,103 @@ function initPath(dots, map) {
     }).addTo(map);
 }
 
-function getRealtimeGeoposition(map, drones) {
-    setInterval(function () {
+function getAllPositionList (paths) {
+  var list = [];
+  var step = 0.00005;
+  var current = paths[0]
+  for (var i = 1; i < paths.length; i++) {
+    var isLatBigger = paths[i].lat < current.lat
+    var isLngBigger = paths[i].lng < current.lng
+    if (isLatBigger) {
+      if (isLngBigger) {
+        while(paths[i].lat < current.lat || paths[i].lng < current.lng) {
+          if (paths[i].lat < current.lat && paths[i].lng < current.lng) {
+              list.push({lat: current.lat - step, lng:current.lng - step})
+          } else if (paths[i].lat < current.lat){
+              list.push({lat: current.lat - step, lng:current.lng})
+          } else {
+              list.push({lat: current.lat, lng:current.lng  - step})
+          }
+          current = list[list.length - 1]
+        }
+      } else {
+        while(paths[i].lat < current.lat || paths[i].lng > current.lng) {
+          if (paths[i].lat < current.lat && paths[i].lng > current.lng) {
+              list.push({lat: current.lat - step, lng:current.lng + step})
+          } else if (paths[i].lat < current.lat){
+              list.push({lat: current.lat - step, lng:current.lng})
+          } else {
+              list.push({lat: current.lat, lng:current.lng  + step})
+          }
+          current = list[list.length - 1]
+        }
+      }
+    } else {
+      if (isLngBigger) {
+        while(paths[i].lat > current.lat || paths[i].lng < current.lng) {
+          if (paths[i].lat > current.lat && paths[i].lng < current.lng) {
+              list.push({lat: current.lat + step, lng:current.lng - step})
+          } else if (paths[i].lat > current.lat){
+              list.push({lat: current.lat + step, lng:current.lng})
+          } else {
+              list.push({lat: current.lat, lng:current.lng  - step})
+          }
+          current = list[list.length - 1]
+        }
+      } else {
+        while(paths[i].lat > current.lat || paths[i].lng > current.lng) {
+          if (paths[i].lat > current.lat && paths[i].lng > current.lng) {
+              list.push({lat: current.lat + step, lng:current.lng + step})
+          } else if (paths[i].lat > current.lat){
+              list.push({lat: current.lat + step, lng:current.lng})
+          } else {
+              list.push({lat: current.lat, lng:current.lng  + step})
+          }
+          current = list[list.length - 1]
+        }
+      }
+    }
+
+  }
+  return list
+}
+
+function doReachDestination() {
+  document.querySelector('aside').click(); //hack
+  if('speechSynthesis' in window){
+    var voices = speechSynthesis.getVoices();
+    var speech = new SpeechSynthesisUtterance(text);
+    speech.voice = voices[33]
+    speech.lang = 'en-US';
+    speech.rate = 0.85;
+    window.speechSynthesis.speak(speech);
+    text = 'You have reached your destination'
+  }
+}
+
+function setNewDronePosition(i, drones, positionSetList, currentPosition) {
+  var posRotation = (i >>> 0).toString(2);
+  posRotation = posRotation.length > 1 ? posRotation : "0" + posRotation;
+  drones[i].location = [positionSetList[currentPosition].lat + (-0.0005 * posRotation[0]), positionSetList[currentPosition].lng + (-0.0005 * posRotation[1])]
+  drones[i].drone.setLatLng(drones[i].location);
+  currentMainDronePosition = drones[i].location;
+}
+
+function getRealtimeGeoposition(map, drones, paths) {
+    var text = ''
+    var positionSetList = getAllPositionList(paths);
+    var currentPosition = 0;
+    var interval = setInterval(function () {
         for (var i in drones) {
-            drones[i].location = [drones[i].location[0] - 0.00005, drones[i].location[1] + 0.00005]
-            drones[i].drone.setLatLng(drones[i].location);
+          if (positionSetList[currentPosition]) {
+            setNewDronePosition(i, drones, positionSetList, currentPosition);
+          } else {
+            clearInterval(interval)
+          }
+        }
+        currentPosition++
+        if(!positionSetList[currentPosition]) {
+            doReachDestination()
         }
         map.panTo(new L.LatLng(drones[2].location[0], drones[2].location[1]), { animation: true });
     }, 1000)
@@ -389,9 +480,9 @@ function initWarningListener (executionId) {
           url: "get_warnings/" +executionId,
           type: 'post',
           data: {
-            latitude: 31.459354,
+            latitude: currentMainDronePosition[0],
             // latitude: pos.coords.latitude,
-            longitude: 35.3579443
+            longitude: currentMainDronePosition[1]
             // longitude:pos.coords.longitude
           },
           success: function (success) {
@@ -406,13 +497,23 @@ function initWarningListener (executionId) {
   }, 7000)
 }
 
+function shouldDisplayWaerning(warning) {
+  return ignoredWarnings.indexOf(warning.id) < 0
+      && displayingWarnings.indexOf(warning.id) < 0
+      && (user_role != "MAIN" || (user_role == "MAIN" && warning.level > 2))
+      && (user_type != "anonymous")
+}
+
 function showWarnings (warningList) {
   for (var i in warningList) {
-    createWarning(warningList[i])
-    $('#toast' + warningList[i].id).toast({
+    if (shouldDisplayWaerning(warningList[i])) {
+      displayingWarnings.push(warningList[i].id)
+      createWarning(warningList[i])
+      $('#toast' + warningList[i].id).toast({
       animation: true,
       autohide: false
     }).toast('show');
+    }
   }
 }
 
@@ -428,14 +529,14 @@ function renderWarnings (warningList) {
   }
 }
 
-function getButtons (actions) {
+function getButtons (actions, warning_id) {
   if (!actions.length) return ""
   var elements = '<div class="btn-group btn-group-sm d-flex p-2 bd-highlight" role="group">'
   for (var i in actions) {
     var element =  document.createElement('button')
     element.className = "btn btn-secondary"
     element.setAttribute('type', 'button')
-    element.setAttribute('onclick', warningSdk[actions[i].action])
+    element.setAttribute('onclick', `${warningSdk[actions[i].action]}(${warning_id})`)
     element.innerText = actions[i].text
     elements += element.outerHTML
   }
@@ -448,7 +549,7 @@ function createWarning(warning) {
     alert.setAttribute('role', 'alert')
     alert.setAttribute('aria-live', 'assertive')
     alert.setAttribute('aria-atomic', 'true')
-    var buttons = getButtons(warning.warning_action)
+    var buttons = getButtons(warning.warning_action, warning.id)
     alert.innerHTML = ` <div class="toast-header">
     <strong class="mr-auto">Warning</strong>
       <small>${warning.timesince}</small>
@@ -465,12 +566,36 @@ function createWarning(warning) {
 `
   document.getElementById('toast-container').prepend(alert)
 }
-
-function ignoreFn () {
+function executeWarningAction(warning_id, action) {
+  $.ajax({
+          url: "set_warning",
+          type: 'post',
+          success: function (success){
+            console.log(success)
+            console.log('hiding' + warning_id)
+            $('#toast' + warning_id).toast('hide')
+          },
+          data: {
+            warning_id: warning_id,
+            action: action
+          },
+          headers: {
+            'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+          }
+      })
 
 }
-function executeSOSFn () {
 
+function ignoreFn (warning_id) {
+    executeWarningAction(warning_id, 'ignore')
+    ignoredWarnings.push(warning_id)
 }
-function escalateFn () {}
-function snooze() {}
+
+function escalateFn (warning_id) {
+  executeWarningAction(warning_id, 'escalate')
+}
+
+
+function snoozeFn(warning_id) {
+  executeWarningAction(warning_id, 'snooze')
+}

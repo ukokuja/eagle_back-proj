@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+from django.db.models import F
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -42,8 +43,7 @@ def navigate(request, trip_id):
     return render(request, "navigate.html", {"execution": execution,
                                              "destinations": json.dumps(destinations) ,
                                              "drones": drones,
-                                            #  "drones_videos": drones_videos,
-                                             "user": request.user,
+                                             "user_role": request.user.role,
                                              "user_type": user_type})
 
 @login_required
@@ -51,11 +51,28 @@ def get_warnings(request, execution_id):
     latitude = request.POST.get('latitude')
     longitude = request.POST.get('longitude')
     # warnings = Warning.objects.filter(execution_id=execution_id)
-    warnings = Warning.objects.filter(execution_id=1)
+    warnings = Warning.objects.filter(execution_id=1, snooze_count=0, is_active=True)
+    Warning.objects.filter(execution_id=1, snooze_count__gt=0).update(snooze_count=F('snooze_count')-1)
     serializer = WarningSerializer(warnings, many=True)
     warning_within_radius = get_warnings_within_radius(serializer.data, latitude, longitude)
 
     return HttpResponse(json.dumps(warning_within_radius), content_type="application/json")
+
+@login_required
+def set_warning(request):
+    warning_id = request.POST.get('warning_id')
+    action = request.POST.get('action')
+    warning = Warning.objects.get(id=warning_id)
+    if action == 'snooze':
+        warning.snooze_count = 5
+    elif action == 'escalate':
+        level = int(warning.level) + 1
+        warning.level = str(level)
+    elif action == 'ignore':
+        # warning.is_active = False
+        pass #for demo purposes
+    warning.save()
+    return HttpResponse('OK', status=200)
 
 
 def get_warnings_within_radius(warnings, latitude, longitude):
@@ -67,6 +84,7 @@ def get_warnings_within_radius(warnings, latitude, longitude):
         distance = geopy.distance.distance(coords_1, coords_2).km
         if distance <= w.get('radius'):
             warning_within_radius.append(w)
+
 
 
     return warning_within_radius

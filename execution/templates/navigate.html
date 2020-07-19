@@ -22,7 +22,7 @@
         <div id="toast-container" aria-live="polite" aria-atomic="true">
         </div>
         <header class="container-lg">
-            <section><i class="fa fa-bars"></i></section>
+            <section class="hamburger-container"><i class="fa fa-bars"></i></section>
         </header>
         <main> 
             <aside>
@@ -221,6 +221,8 @@
         <script>
             var destinations = {{ destinations  |safe }};
             var drones = {{ drones |safe}};
+            var user_role = '{{ user_role }}';
+            var user_type = '{{ user_type }}';
         </script>
         <script src="{% static 'scripts/script.js' %}"></script>
         <script>

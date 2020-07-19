@@ -1,0 +1,5 @@
+{
+  "ignore": "ignoreFn",
+  "escalate": "escalateFn",
+  "snooze": "snoozeFn"
+}
