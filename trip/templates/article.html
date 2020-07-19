@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -27,7 +28,7 @@
           </svg>
         </a>
         <section class="my-2 my-lg-0 user-image">
-          <a href="#"><img src="images/user.png" alt="user profile"></a>
+          <a href="#"><img src="{{ user.picture.url }}" alt="user profile"></a>
         </section>
       </nav>
       <section class="breadcrumbs container-md">
@@ -41,14 +42,20 @@
         <section>
             <div class="btn-group btn-group-lg d-flex" role="group">
               <a class="btn btn-light" {% if destinations|length > 0 %}href="/navigate/{{ trip.id }}"{% else %}href="#"{% endif %}>Start now</a>
-              <a class="btn btn-light" href="edit/{{ trip.id }}">Edit</a>
+              {% if not is_collaborator %}<a class="btn btn-light" href="edit/{{ trip.id }}">Edit</a>{% endif %}
               <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 More
               </button>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#shareModal">Share</a>
-                <a class="dropdown-item" href="#" data-toggle="modal"
+                {% if not is_collaborator %}
+                  <a class="dropdown-item" href="#" data-toggle="modal"
                    data-target="#deleteModal">Delete</a>
+                  <a class="dropdown-item" href="#" data-toggle="modal"
+                   data-target="#publicModal">Make public</a>
+                  <a class="dropdown-item" href="#" data-toggle="modal"
+                   data-target="#collaboratorsModal">Set collaborators</a>
+                {% endif %}
               </div>
             </div>
         </section>
@@ -160,6 +167,39 @@
         </section>
       </div>
     </main>
+    <div class="modal fade" id="collaboratorsModal" tabindex="-1" role="dialog" aria-labelledby="collaboratorsModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+      <form action="set_collaborator/{{ trip.id }}" method="POST">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="collaboratorsModalTitle">Select your collaborators</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          {% for collaborator in form.collaborators.field.choices %}
+                <section>
+                    <input id="check-{{ collaborator.id }}" type="checkbox" name="collaborators"
+                           value="{{ collaborator.id }}"
+                           {% if collaborator.id in collaborators %}checked="checked" disabled="disabled"{% endif %}>
+                    <label for="check-{{ collaborator.id }}">
+                        <img src="{{ collaborator.picture }}" class="rounded-circle">
+                    <span>{{ collaborator.username }}</span>
+                    </label>
+
+                </section>
+            {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <input type="submit" class="btn btn-primary"  value="Save">
+          </div>
+        </div>
+      </form>
+      </div>
+    </div>
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -175,6 +215,28 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <a class="btn btn-primary" href="delete/{{ trip.id }}">Yes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="publicModal" tabindex="-1" role="dialog" aria-labelledby="publicModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="publicModalTitle">Are you sure?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            If you click on yes, the trip will be public!
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form action="set_public/{{ trip.id }}" method="POST">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-primary" value="Yes">
+            </form>
           </div>
         </div>
       </div>

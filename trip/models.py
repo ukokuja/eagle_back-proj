@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core import validators
 from django.db import models, __all__
 from django import forms
@@ -6,6 +7,7 @@ from django import forms
 from django.forms import ModelForm
 
 from common.models import BaseModel, Place, Comment
+from users.models import Profile
 
 ACCESSABILITY_CHOICES = (
     ('High Accessible', 'High Accessible'),
@@ -50,8 +52,9 @@ class Trip(BaseModel):
     accessability = models.CharField(max_length=63, choices=ACCESSABILITY_CHOICES, default='HIGH')
     image = models.ForeignKey(TripImages, on_delete=models.CASCADE, null=True)
     drone_list = models.ManyToManyField(Drone, through="TripDrone", blank=True, null=True)
-    is_active= models.BooleanField(default=True, blank=False)
-    # TODO: change manytomany
+    is_active = models.BooleanField(default=True, blank=False)
+    is_public = models.BooleanField(default=False, blank=False)
+
 
     @property
     def image_url(self):
@@ -70,11 +73,12 @@ class Stop(BaseModel):
 
 class Destination(BaseModel):
     name = models.CharField(max_length=127, blank=None)
-    stop = models.ForeignKey(Stop, on_delete=models.SET_NULL, null=True)
-    start_time = models.TimeField(blank=None)
-    stop_time = models.TimeField(blank=None)
+    stop = models.ForeignKey(Stop, on_delete=models.CASCADE, null=False)
+    start_time = models.TimeField(blank=False, null=False)
+    stop_time = models.TimeField(blank=False, null=False)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True)
     description = models.CharField(max_length=511, blank=None, default="")
+    is_active = models.BooleanField(default=True, blank=True)
 
     class Meta():
         unique_together= ('trip', 'name')
@@ -102,6 +106,11 @@ class TripComment (models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
 
+class TripCollaborator(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True)
+    class Meta:
+        unique_together = ('user', 'trip')
 
 class TripForm(ModelForm):
     includes = forms.MultipleChoiceField(choices=INCLUDES_CHOICES,
@@ -137,3 +146,15 @@ class TripForm(ModelForm):
             self.fields['not_includes'].initial = not_includes
             self.fields['destinations'].initial = destinations
             self.fields['created_by'].initial = created_by
+
+
+class CollaboratorsForm(forms.Form):
+    collaborators = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                             required=True)
+    def __init__(self, *args, **kwargs):
+        user_id = kwargs.pop('user_id')
+        super(CollaboratorsForm, self).__init__(*args, **kwargs)
+        profiles = [{'id': x.id, 'username':x.username, 'picture':x.picture.url}
+                     for x in Profile.objects.all().exclude(id__in=[user_id])]
+        self.fields['collaborators'].choices = profiles
+

@@ -37,10 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
     'common',
     'trip',
     'execution',
-    'users',
     'crispy_forms'
 ]
 
@@ -136,3 +136,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
+AUTH_USER_MODEL = 'users.Profile'

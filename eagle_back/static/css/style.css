@@ -39,7 +39,6 @@ body {
 
 .profile {
     display: block;
-    background: url("../images/user.png") 50%/contain no-repeat;
     height: 30px;
     width: 30px;
     border-radius: 100%;
@@ -95,7 +94,20 @@ body {
     box-shadow: 2px 2px 12px 0px #AAA;
 }
 
-
+.is-collaborator {
+    position: relative;
+}
+.is-collaborator .notify-badge{
+    position: absolute;
+    right:20px;
+    top:10px;
+    background: rgba(19, 19, 139, 0.87);
+    text-align: center;
+    border-radius: 30px 30px 30px 30px;
+    color:white;
+    padding:5px 10px;
+    z-index: 10;
+}
 
 
 
@@ -154,6 +166,23 @@ body {
     font-size: 11px;
     color: #ee5535
 }
+#collaboratorsModal form img {
+    width: 40px;
+    height: 40px;
+    filter: grayscale(100%);
+    border: 2px solid #777;
+}
+#collaboratorsModal form input[type='checkbox']  {
+    display: none;
+}
+#collaboratorsModal form input[type='checkbox'] ~ label {
+    cursor: pointer;
+}
+#collaboratorsModal form input[type='checkbox']:checked ~ label> img {
+    filter: none;
+    border-color: #0d7233;
+}
+
 #mainArticleLayout header{
     background: rgba(0,0,0,0.3) url('../images/sdeBoker.jpg') 50%/cover no-repeat;
     height: 300px;
@@ -515,11 +544,12 @@ main#navigationLayout {
 #navigationLayout aside > section:first-child {
     width: 15vh;
     height: 15vh;
-    background: url('../images/user.png') 50%/cover;
+    background: 50%/cover;
     justify-content: center;
     align-content: center;
     margin: 20px auto;
     box-shadow: 2px 2px 12px 0px #AAA;
+    border: 5px solid #AAA;
 }
 #navigationLayout aside > section:nth-child(2) {
     border-top: 1px solid #DDD;

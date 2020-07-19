@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
-from trip.views import homepage, delete_trip, create_trip
+from trip.views import homepage
 from users import views as user_views
 from common.views import settingsView
 from django.contrib.auth import views as auth_views

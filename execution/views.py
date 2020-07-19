@@ -1,10 +1,13 @@
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
+from rest_framework.exceptions import PermissionDenied
+
 from common.models import Place
 from execution.models import Execution, Warning
 from execution.serializers import WarningSerializer
@@ -22,13 +25,28 @@ def get_places(list, prop):
 
 def navigate(request, trip_id):
     execution = Execution.objects.create(trip_id=trip_id)
+    if request.user.is_anonymous:
+        if not execution.trip.is_public:
+            raise PermissionDenied
+        user_type = 'anonymous'
+    elif execution.trip.tripcollaborator_set.filter(user_id=request.user.id).count() > 0:
+        user_type = 'collaborator'
+    elif request.user.id == execution.trip.created_by.id:
+        user_type = 'owner'
+    else:
+        raise PermissionDenied
+
     destinations = DestinationSerializer(Destination.objects.filter(trip_id=trip_id), many=True).data
     drones = get_places(execution.trip.drone_list, 'position_id')
 
-    return render(request, "navigate.html", {"execution": execution, "destinations": json.dumps(destinations) , "drones": drones})
+    return render(request, "navigate.html", {"execution": execution,
+                                             "destinations": json.dumps(destinations) ,
+                                             "drones": drones,
+                                             "user": request.user,
+                                             "user_type": user_type})
 
-
-def get_warnings (request, execution_id):
+@login_required
+def get_warnings(request, execution_id):
     latitude = request.POST.get('latitude')
     longitude = request.POST.get('longitude')
     # warnings = Warning.objects.filter(execution_id=execution_id)

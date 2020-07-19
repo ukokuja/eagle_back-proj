@@ -30,8 +30,8 @@
               Eagle Eye
             </a>
             
-        <section class="my-2 my-lg-0">
-                <a href="{% url 'profile' %}" class="profile"></a>
+        <section class="my-2 my-lg-0 user-image">
+          <a href="#"><img src="{{ user.picture.url }}" alt="user profile"></a>
         </section>
       </section>
       <nav class="navbar navbar-expand-lg navbar-light"> 
@@ -65,8 +65,24 @@
     </header>
 
     <main class="container">
+
         <h2 id="pageTitle">My Trips</h2>
         <section class="row row-cols-1 row-cols-md-3">
+            {% for tc in trips_collaborator %}
+                <section class="col mb-4 is-collaborator">
+                <span class="notify-badge">Shared</span>
+                    <div class="card bg-light text-dark">
+                        <a href="trip/{{ tc.trip.id }}" class="stretched-link"><img src="{{ tc.trip.image_url }}" class="card-img" alt="Sde Boker"></a>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ tc.trip.name }}</h5>
+                            <p class="card-text">{{ tc.trip.description }}</p>
+                        </div>
+                        <div class="card-img-overlay">
+                          <h5 class="card-title">{{ tc.trip.name }}</h5>
+                        </div>
+                    </div>
+                </section>
+            {% endfor %}
             {% for trip in trips %}
                 <section class="col mb-4">
                 <div class="card bg-light text-dark">

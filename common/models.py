@@ -1,14 +1,14 @@
-from django.contrib.auth.models import User, AbstractUser
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class BaseModel(models.Model):
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="+")
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, related_name="+")
     created_date = models.DateTimeField(auto_now_add=True)
-    modified_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="+")
+    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, related_name="+")
     modified_date = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -28,6 +28,7 @@ class Comment(BaseModel):
     rank = models.PositiveIntegerField(default=1)
 
 class Setting(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     key = models.CharField(max_length=127, blank=None)
     value = models.CharField(blank=True, default="", max_length=127)
+

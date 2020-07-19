@@ -1,12 +1,20 @@
 // constants
-var warning_codes = {
+var warningCodes = {
   "HIGH": 'high',
   "MEDIUM": 'medium',
   "LOW": 'low'
 }
-var action_codes = {
+var warningSdk = {
   "ignore": ignoreFn,
-  "sos": executeSOS
+  "sos": executeSOSFn,
+  "escalate": escalateFn,
+  "snooze": snooze
+}
+// data
+var editorMapProps = {
+  editMarker: false,
+  isMapInitialized: false,
+  map: false
 }
 // Article  Javascript
 function initArticle() {
@@ -61,11 +69,7 @@ function initFooterInteraction(form) {
         $(form).submit();
     })
 }
-var editorMapProps = {
-  editMarker: false,
-  isMapInitialized: false,
-  map: false
-}
+
 function getDestinationHTML (destination) {
   return `
           <div class="card border-light mb-3">
@@ -86,7 +90,7 @@ function getDestinationHTML (destination) {
                    </button>
                    <button class="btn btn-link" type="button" data-target="#collapseOne" aria-expanded="true"
                       aria-controls="collapseOne">
-                   <i class="far fa-trash-alt"></i>
+                   <i class="far fa-trash-alt" onclick="removeDestination(${destination.id})"></i>
                    </button>
                 </h2>
              </div>
@@ -102,12 +106,15 @@ function renderDestinations () {
   $("#destinationContainer").html("")
   var destinations = JSON.parse($("#id_destinations").val())
   for (var i in destinations) {
-    var html = getDestinationHTML(destinations[i])
-    var newDestination = document.createElement('div')
-    newDestination.className = "accordion"
-    newDestination.setAttribute('id', 'accordionExample')
-    newDestination.innerHTML = html
-    $("#destinationContainer").append(newDestination)
+    if (destinations[i].is_active) {
+      var html = getDestinationHTML(destinations[i])
+      var newDestination = document.createElement('div')
+      newDestination.className = "accordion"
+      newDestination.setAttribute('id', 'accordionExample')
+      newDestination.innerHTML = html
+      console.log('appended')
+      $("#destinationContainer").append(newDestination)
+    }
   }
 }
 function initEditor() {
@@ -155,10 +162,13 @@ function setModalFields(place, description, timeFrom, timeTo) {
 function saveDestiantions(destinations, id) {
   $("#editModal .btn-primary").click(function () {
     var position = editorMapProps.editMarker.getLatLng()
-    destination = destinations.find(d => d.id == id) || {
+    var destination = {
       stop: {
         place: {}
       }
+    }
+    if (id) {
+      destination = destinations.find(d => d.id == id)
     }
     destination.start_time_parsed = $("#timeFrom").val()
     destination.stop_time_parsed = $("#timeTo").val()
@@ -166,6 +176,7 @@ function saveDestiantions(destinations, id) {
     destination.description = $("#descriptionField").val()
     destination.stop.place.longitude = position.lng
     destination.stop.place.latitude = position.lat
+    destination.is_active = true
     if (!id)  {
       destinations.push(destination)
     }
@@ -224,6 +235,13 @@ function initModalSchedule() {
         saveDestiantions(destinations, id);
     })
 }
+function removeDestination(id) {
+  var destinations = JSON.parse($("#id_destinations").val())
+  destination = destinations.find(d => d.id == id)
+  destination.is_active = false
+  $("#id_destinations").val(JSON.stringify(destinations))
+  renderDestinations();
+}
 function initFormValidation() {
     var editForm = $('#editForm');
     editForm.submit(function (event) {
@@ -263,6 +281,7 @@ function initBinding() {
         $(".breadcrumbs h2").html(this.value);
     })
 }
+
 //Navigate Javascript
 function initNavigator(executionId) {
 
@@ -397,6 +416,7 @@ function showWarnings (warningList) {
   }
 }
 
+
 function getButtons (actions) {
   if (!actions.length) return ""
   var elements = '<div class="btn-group btn-group-sm d-flex p-2 bd-highlight" role="group">'
@@ -404,7 +424,7 @@ function getButtons (actions) {
     var element =  document.createElement('button')
     element.className = "btn btn-secondary"
     element.setAttribute('type', 'button')
-    element.setAttribute('onclick', action_codes[actions[i].action])
+    element.setAttribute('onclick', warningSdk[actions[i].action])
     element.innerText = actions[i].text
     elements += element.outerHTML
   }
@@ -412,7 +432,7 @@ function getButtons (actions) {
 }
 function createWarning(warning) {
     var alert = document.createElement('div');
-    alert.className = `toast ${warning_codes[warning.level]}`;
+    alert.className = `toast ${warningCodes[warning.level]}`;
     alert.setAttribute('id', 'toast' + warning.id)
     alert.setAttribute('role', 'alert')
     alert.setAttribute('aria-live', 'assertive')
@@ -438,6 +458,8 @@ function createWarning(warning) {
 function ignoreFn () {
 
 }
-function executeSOS () {
+function executeSOSFn () {
 
 }
+function escalateFn () {}
+function snooze() {}

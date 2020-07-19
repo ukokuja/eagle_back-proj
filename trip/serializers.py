@@ -17,4 +17,4 @@ class DestinationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Destination
-        fields = ['id', 'name', 'stop', 'start_time_parsed', 'stop_time_parsed', 'description']
+        fields = ['id', 'name', 'stop', 'start_time_parsed', 'stop_time_parsed', 'description', 'is_active']
