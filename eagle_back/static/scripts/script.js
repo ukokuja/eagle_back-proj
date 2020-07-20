@@ -511,7 +511,7 @@ function renderWarningList() {
 
 function initWarningListener (executionId) {
   var interval = setInterval(function () {
-    navigator.geolocation.getCurrentPosition(function (pos){
+    // navigator.geolocation.getCurrentPosition(function (pos){
       $.ajax({
           url: "get_warnings/" +executionId,
           type: 'post',
@@ -530,7 +530,7 @@ function initWarningListener (executionId) {
             'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
           }
       })
-    });
+    // });
   }, 7000)
 }
 
