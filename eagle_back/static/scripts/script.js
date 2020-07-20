@@ -155,7 +155,7 @@ function setModalFields(place, description, timeFrom, timeTo) {
 }
 
 function saveDestiantions(destinations, id) {
-  $("#editModal .btn-primary").click(function () {
+
     var position = editorMapProps.editMarker.getLatLng()
     var destination = {
       stop: {
@@ -177,7 +177,7 @@ function saveDestiantions(destinations, id) {
     }
     $("#id_destinations").val(JSON.stringify(destinations))
     renderDestinations();
-  })
+
 }
 
 function getDestinationParameters(button) {
@@ -222,12 +222,16 @@ function setEditModalMap(destinations, id) {
 
 function initModalSchedule() {
     var destinations = JSON.parse($("#id_destinations").val())
-  $('#editModal').on('show.bs.modal', function (event) {
+    $('#editModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var {timeFrom, timeTo, place, description, id} = getDestinationParameters(button);
         setModalFields.call(this, place, description, timeFrom, timeTo);
         setEditModalMap(destinations, id);
-        saveDestiantions(destinations, id);
+        $("#editModal .btn-primary").data('id', id || null)
+    })
+    $("#editModal .btn-primary").click(function () {
+      var id = $("#editModal .btn-primary").data('id')
+      saveDestiantions(destinations, id);
     })
 }
 function removeDestination(id) {
@@ -547,18 +551,6 @@ function showWarnings (warningList) {
       autohide: false
     }).toast('show');
     }
-  }
-}
-
-function renderWarnings (warningList) {
-  $("#warningContainerHigh").html("")
-  for (var i in warningList) {
-    var newWarning = `
-    <div class="warning1">
-        ${warningList[i].message}
-    </div>
-    `
-    $("#warningContainerHigh").append(newWarning.innerHTML)
   }
 }
 

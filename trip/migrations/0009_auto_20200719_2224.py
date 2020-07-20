@@ -18,11 +18,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='destination',
-            name='stop',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='trip.Stop'),
-        ),
-        migrations.AlterField(
-            model_name='destination',
             name='stop_time',
             field=models.TimeField(),
         ),
