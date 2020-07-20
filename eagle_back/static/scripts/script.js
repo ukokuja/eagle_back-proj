@@ -370,7 +370,7 @@ function initPath(dots, map) {
 function getAllPositionList (paths) {
   var list = [];
   // var step = 0.00005; real speed
-  var step = 0.00015; // demo purpose speed
+  var step = 0.0003; // demo purpose speed
   var current = paths[0]
   for (var i = 1; i < paths.length; i++) {
     var isLatBigger = paths[i].lat < current.lat
