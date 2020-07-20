@@ -3,6 +3,7 @@ var warningCodes = {}
 var warningSdk = {}
 var ignoredWarnings = []
 var displayingWarnings = []
+var displayedWarnings = []
 var currentMainDronePosition = [1,1]
 // data
 var editorMapProps = {
@@ -473,6 +474,37 @@ function initHamburguer() {
     })
 }
 
+function renderWarningList() {
+  $("#list-high .list-group").html("")
+  $("#list-medium .list-group").html("")
+  $("#list-low .list-group").html("")
+  for (var i in displayedWarnings) {
+    var template = `
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        ${displayedWarnings[i].message}
+        <span class="badge badge-primary badge-pill">${displayedWarnings[i].timesince}</span>
+      </li>`
+    if (displayedWarnings[i].level == 4) {
+      $("#list-high .list-group").prepend(template)
+    } else if (displayedWarnings[i].level == 3) {
+      $("#list-medium .list-group").prepend(template)
+    } else if (displayedWarnings[i].level == 2) {
+      $("#list-low .list-group").prepend(template)
+    }
+    if ($("#list-high .list-group").html() == "") {
+      $("#list-high .list-group").html("<span>There are no high priority alerts</span>")
+    }
+    if ($("#list-medium .list-group").html() == "") {
+      $("#list-medium .list-group").html("<span>There are no medium priority alerts</span>")
+    }
+    if ($("#list-low .list-group").html() == "") {
+      $("#list-low .list-group").html("<span>There are no low priority alerts</span>")
+    }
+    $(".badge-warnings").html(displayedWarnings.length)
+  }
+
+}
+
 function initWarningListener (executionId) {
   var interval = setInterval(function () {
     navigator.geolocation.getCurrentPosition(function (pos){
@@ -487,6 +519,7 @@ function initWarningListener (executionId) {
           },
           success: function (success) {
             showWarnings(success)
+            renderWarningList()
           },
           dataType: 'json',
           headers: {
@@ -565,6 +598,7 @@ function createWarning(warning) {
     </div>
 `
   document.getElementById('toast-container').prepend(alert)
+  displayedWarnings.push(warning)
 }
 function executeWarningAction(warning_id, action) {
   $.ajax({

@@ -39,10 +39,11 @@ def navigate(request, trip_id):
 
     destinations = DestinationSerializer(Destination.objects.filter(trip_id=trip_id), many=True).data
     drones = get_places(execution.trip.drone_list, 'position_id')
-    # drones_videos = [x.output for x in execution.trip.drone_list]
+    drone_videos = [x.output for x in list(execution.trip.drone_list.all()) if x.output]
     return render(request, "navigate.html", {"execution": execution,
                                              "destinations": json.dumps(destinations) ,
                                              "drones": drones,
+                                             "drone_videos": drone_videos,
                                              "user_role": request.user.role,
                                              "user_type": user_type})
 

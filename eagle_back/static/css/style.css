@@ -562,7 +562,9 @@ main#navigationLayout {
 #navigationLayout header > section {
     display: none;
 }
-
+.bannerformmodalDrone video {
+    width: 100%;
+}
 @media (max-width: 414px) {
     #navigationLayout:not(.isHamburgerOpen) aside {
         width: 0;
