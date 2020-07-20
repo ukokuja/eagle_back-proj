@@ -27,7 +27,11 @@
 <body id="mainArticleLayout">
   <header class="article" style="background-image: url('{{ trip.image_url }}')" data-id="{{ trip.image.id }}">
     <nav class="navbar navbar-dark container-md">
-      <a class="navbar-brand" href="/trip/{{ trip.id }}">
+        {% if trip.id %}
+            <a class="navbar-brand" href="/trip/{{ trip.id }}">
+        {% else %}
+            <a class="navbar-brand" href="/">
+        {% endif %}
         <svg class="bi bi-arrow-left" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
           xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd"
