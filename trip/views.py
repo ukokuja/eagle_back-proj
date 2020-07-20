@@ -27,10 +27,8 @@ def set_collaborator(request, trip_id):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = CollaboratorsForm(request.POST, **{"user_id": request.user.id})
-        # check whether it's valid:
-        if form.is_valid():
-            for user_id in form.data['collaborators']:
-                TripCollaborator.objects.get_or_create(trip_id=trip_id, user_id=user_id)
+        for user_id in form.data['collaborators']:
+            TripCollaborator.objects.get_or_create(trip_id=trip_id, user_id=user_id)
     return redirect('trip', trip_id)
 
 @login_required
@@ -86,7 +84,7 @@ def article(request, trip_id):
     properties = TripProperty.objects.filter(trip_id=trip_id)
     destinations = DestinationSerializer(Destination.objects.filter(trip_id=trip_id), many=True)
     form = CollaboratorsForm(request.POST, **{"user_id": request.user.id})
-    collaborators = [x.id for x in TripCollaborator.objects.filter(trip_id=trip_id)]
+    collaborators = [x.user.id for x in TripCollaborator.objects.filter(trip_id=trip_id)]
     return render(request, 'article.html', {"trip": trip, "properties": properties,
                                             "destinations": destinations.data,
                                             "user": request.user,
