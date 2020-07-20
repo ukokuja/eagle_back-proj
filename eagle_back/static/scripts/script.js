@@ -429,6 +429,7 @@ function getAllPositionList (paths) {
   return list
 }
 
+var text = ''
 function doReachDestination() {
   document.querySelector('aside').click(); //hack
   if('speechSynthesis' in window){
@@ -451,7 +452,6 @@ function setNewDronePosition(i, drones, positionSetList, currentPosition) {
 }
 
 function getRealtimeGeoposition(map, drones, paths) {
-    var text = ''
     var positionSetList = getAllPositionList(paths);
     var currentPosition = 0;
     var interval = setInterval(function () {
