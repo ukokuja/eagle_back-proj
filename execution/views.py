@@ -26,16 +26,22 @@ def get_places(list, prop):
 
 def navigate(request, trip_id):
     execution = Execution.objects.create(trip_id=trip_id)
+    user_type = 'other'
+    user_role = 'other'
     if request.user.is_anonymous:
         if not execution.trip.is_public:
             raise PermissionDenied
         user_type = 'anonymous'
     elif execution.trip.tripcollaborator_set.filter(user_id=request.user.id).count() > 0:
         user_type = 'collaborator'
+        user_role = request.user.role
     elif request.user.id == execution.trip.created_by.id:
         user_type = 'owner'
+        user_role = request.user.role
     else:
-        raise PermissionDenied
+        user_role = request.user.role
+        if not execution.trip.is_public:
+            raise PermissionDenied
 
     destinations = DestinationSerializer(Destination.objects.filter(trip_id=trip_id), many=True).data
     drones = get_places(execution.trip.drone_list, 'position_id')
@@ -44,7 +50,7 @@ def navigate(request, trip_id):
                                              "destinations": json.dumps(destinations) ,
                                              "drones": drones,
                                              "drone_videos": drone_videos,
-                                             "user_role": request.user.role,
+                                             "user_role": user_role,
                                              "user_type": user_type})
 
 @login_required

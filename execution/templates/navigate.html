@@ -27,7 +27,9 @@
         <main>
 
             <aside>
-                <section class="rounded-circle" style="background-image: url({{ user.picture.url }})">
+
+                <section class="rounded-circle {% if user_type == 'anonymous' %}hidden{% endif %}" style="background-image: url({{ user.picture.url }})">
+
                 </section>
                 <section>
                     <ul>

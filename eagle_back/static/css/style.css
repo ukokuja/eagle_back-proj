@@ -544,6 +544,9 @@ main#navigationLayout {
     text-align: center;
     margin: 20px;
 }
+#navigationLayout aside > section.hidden {
+    display: none;
+}
 #navigationLayout aside > section:first-child {
     width: 15vh;
     height: 15vh;

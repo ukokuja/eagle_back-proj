@@ -17,7 +17,7 @@ from trip.utils import get_rand
 def homepage(request):
     if request.user.is_authenticated:
         trips = Trip.objects.filter(created_by=request.user, is_active=True)
-        trips_collaborator = TripCollaborator.objects.filter(user_id=request.user.id)
+        trips_collaborator = TripCollaborator.objects.filter(user_id=request.user.id, trip__is_active=True)
         return render(request, 'index.html', {"trips": trips,
                                               "trips_collaborator": trips_collaborator})
     return redirect('login')
@@ -35,7 +35,7 @@ def set_collaborator(request, trip_id):
 def set_public(request, trip_id):
     trip = Trip.objects.get(id=trip_id)
     if trip.created_by.id == request.user.id:
-        trip.is_active = False
+        trip.is_public = True
         trip.save()
     return redirect('trip', trip_id)
 
