@@ -1,4 +1,4 @@
 geopy
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 django-crispy-forms
 Pillow==7.1.2
